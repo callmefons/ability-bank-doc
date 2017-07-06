@@ -7,8 +7,8 @@
             "name": "MIT"
         }
     },
-    "host": "http://localhost:8080",
-    "basePath": "/v1",
+    "host": "192.168.11.201:8080",
+    "basePath": "/api/v1",
     "schemes": [
         "http"
     ],
@@ -63,16 +63,12 @@
                         "schema": {
                             "type": "object",
                             "required": [
-                                "accessToken"
+                                "user",
+                                "access_token"
                             ],
                             "properties": {
                                 "user": {
-                                    "$ref": "#/definitions/users_response"
-                                },
-                                "accessToken": {
-                                    "type": "string",
-                                    "description": "Unique user token used for identification",
-                                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...."
+                                    "$ref": "#/definitions/profile_response"
                                 }
                             }
                         }
@@ -94,16 +90,15 @@
         },
         "/users": {
             "get": {
-                "description": "This endpoint can be used to retrieve a list of users. ",
-                "summary": "List users",
+                "description": "This endpoint can be used to retrieve a list of users. The Authorization header should be Authorization",
+                "summary": "List or search users",
                 "tags": [
                     "users"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "parameters": [
-                ],
+                "parameters" : [],
                 "responses": {
                     "200": {
                         "description": "The users were retrieved. See Response Class below for schema.",
@@ -154,136 +149,100 @@
                     },
                     "409": {
                         "description": "The email or username has already been used for another user"
-                    },
-                    "default": {
-                        "description": "unexpected error",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
                     }
                 }
             }
         },
-        "/users/{userId}": {
-            "get": {
-                "description": "This endpoint can be used to retrieve user details given the user's id.",
-                "summary": "Get a user",
-                "tags": [
-                    "users"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "description": "The _id of the user to retrieve",
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "The users were retrieved. See Response Class below for schema.",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/users_response"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid request body. The message will vary depending on the cause."
-                    },
-                    "401": {
-                        "description": "Invalid token."
-                    },
-                    "404": {
-                        "description": "The user does not exist."
-                    }
+        "/profile": {
+          "get": {
+            "description": "This endpoint can be used to retrieve user details given the user's id.",
+            "summary": "Get a user's profile",
+            "tags": [
+              "profile"
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "responses": {
+              "200": {
+                "description": "The users were retrieved. See Response Class below for schema.",
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/profile_response"
+                  }
                 }
-            },
-            "patch": {
-                "description": "Updates a user with the object's properties received in the request's body (the object should be a JSON object).",
-                "summary": "Update a user",
-                "tags": [
-                    "users"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "description": "The _id of the user to retrieve",
-                        "type": "string"
-                    },
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "description": "The samples on the right show you every attribute that could be used.",
-                        "required": true,
-                        "schema" : {
-                            "$ref": "#/definitions/patch_users_by_id_body"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200":{
-                        "description": "The user was updated. See Response Class below for schema.",
-                        "schema": {
-                            "$ref": "#/definitions/users_response"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid request body. The message will vary depending on the cause."
-                    },
-                    "409": {
-                        "description": "Invalid or missing api token"
-                    },
-                    "default": {
-                        "description": "unexpected error",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    }
-                }
+              },
+              "400": {
+                "description": "Invalid request body. The message will vary depending on the cause."
+              },
+              "401": {
+                "description": "Invalid token."
+              },
+              "404": {
+                "description": "The user does not exist."
+              }
             }
+          },
+          "patch": {
+            "description": "Updates a user with the object's properties received in the request's body (the object should be a JSON object).",
+            "summary": "Update a user's profile",
+            "tags": [
+              "profile"
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "parameters": [
+              {
+                "name": "body",
+                "in": "body",
+                "description": "The samples on the right show you every attribute that could be used.",
+                "required": true,
+                "schema" : {
+                  "$ref": "#/definitions/patch_users_by_id_body"
+                }
+              }
+            ],
+            "responses": {
+              "200":{
+                "description": "The user was updated. See Response Class below for schema.",
+                "schema": {
+                  "$ref": "#/definitions/profile_response"
+                }
+              },
+              "400": {
+                "description": "Invalid request body. The message will vary depending on the cause."
+              },
+              "409": {
+                "description": "Invalid or missing api token"
+              }
+            }
+          }
         },
-        "/users/{userId}/activation": {
+        "/profile/activation": {
             "patch": {
                 "description": "This endpoint can be used to activation a single user based on the id.",
-                "summary": "Activation a user",
+                "summary": "Activate a user's profile",
                 "tags": [
-                    "users"
+                    "profile"
                 ],
                 "produces": [
                     "application/json"
                 ],
                 "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "description": "The _id of the user to retrieve",
-                        "type": "string"
-                    },
                     {
                         "name": "User status",
                         "in": "body",
-                        "description": "The users status can be activate and deactivate",
+                        "description": "The users status can be active and deactive",
                         "required": true,
                         "schema": {
                             "type": "object",
                             "properties": {
-                                "userStatus":{
-                                    "$ref": "#/definitions/UserStatus"
+                                "user_status":{
+                                    "$ref": "#/definitions/user_status"
                                 }
                             }
-
                         }
                     }
                 ],
@@ -291,7 +250,12 @@
                     "200":{
                         "description": "The user was updated. See Response Class below for schema.",
                         "schema": {
-                            "$ref": "#/definitions/users_response"
+                          "type": "object",
+                          "properties": {
+                            "user_status":{
+                              "$ref": "#/definitions/user_status"
+                            }
+                          }
                         }
                     },
                     "400": {
@@ -314,11 +278,11 @@
         "post_users_body": {
             "type": "object",
             "required": [
-                "email",
-                "password",
-                "firstName",
-                "lastName",
-                "username"
+              "email",
+              "password",
+              "username",
+              "given_name",
+              "family_name"
             ],
             "properties": {
                 "email": {
@@ -332,39 +296,39 @@
                     "example": "password",
                     "description": "The user's password"
                 },
-                "firstName": {
-                    "type": "string",
-                    "example": "john",
-                    "description": "The user's firstname"
-                },
-                "lastName": {
-                    "type": "string",
-                    "example": "doe",
-                    "description": "The user's lastname"
-                },
-                "username": {
-                    "type": "string",
-                    "example": "johndoe",
-                    "description": "The user's username"
-                }
+              "username": {
+                "type": "string",
+                "example": "johndoe",
+                "description": "The user's username"
+              },
+              "given_name": {
+                "type": "string",
+                "example": "john",
+                "description": "The user's given_name"
+              },
+              "family_name": {
+                "type": "string",
+                "example": "doe",
+                "description": "The user's family_name"
+              }
             }
         },
         "patch_users_by_id_body": {
             "type": "object",
             "required": [
-                "firstName",
-                "lastName"
+              "given_name",
+              "family_name"
             ],
             "properties": {
-                "firstName": {
+                "given_name": {
                     "type": "string",
                     "example": "john",
-                    "description": "The user's firstname"
+                    "description": "The user's given_name"
                 },
-                "lastName": {
+                "family_name": {
                     "type": "string",
                     "example": "doe",
-                    "description": "The user's lastname"
+                    "description": "The user's family_name"
                 }
             }
         },
@@ -373,8 +337,8 @@
             "required": [
                 "_id",
                 "email",
-                "firstName",
-                "lastName",
+                "given_name",
+                "family_name",
                 "username"
             ],
             "properties": {
@@ -388,48 +352,123 @@
                     "example": "jhon.doe@mail.com",
                     "description": "The user's email"
                 },
-                "firstName": {
+                "username": {
+                  "type": "string",
+                  "example": "johndoe",
+                  "description": "The user's username"
+                },
+                "given_name": {
                     "type": "string",
                     "example": "john",
-                    "description": "The user's firstname"
+                    "description": "The user's given name"
                 },
-                "lastName": {
+                "family_name": {
                     "type": "string",
                     "example": "doe",
-                    "description": "The user's lastname"
+                    "description": "The user's family name"
                 },
-                "username": {
-                    "type": "string",
-                    "example": "johndoe",
-                    "description": "The user's username"
+                "user_status": {
+                    "$ref": "#/definitions/user_status"
                 },
-                "userStatus": {
-                    "$ref": "#/definitions/UserStatus"
+                "created_at": {
+                  "$ref": "#/definitions/timestamp"
                 },
-                "apps" : {
-                    "type" : "array",
-                    "items" : {
-                        "$ref" : "#/definitions/apps",
-                        "description": "The list of apps that the user is admin"
-                    }
-                },
-                "groups" : {
-                    "type" : "array",
-                    "items" : {
-                        "$ref" : "#/definitions/groups",
-                        "description": "The list of groups that the user has joined to"
-                    }
+                "updated_at": {
+                  "$ref": "#/definitions/timestamp"
                 }
             }
         },
-        "UserStatus": {
+        "profile_response": {
+        "type": "object",
+        "required": [
+          "_id",
+          "email",
+          "given_name",
+          "family_name",
+          "username"
+        ],
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "5457edea1b8f22891a000004",
+            "description": "The user's unique identifier"
+          },
+          "email": {
+            "type": "string",
+            "example": "jhon.doe@mail.com",
+            "description": "The user's email"
+          },
+          "username": {
+            "type": "string",
+            "example": "johndoe",
+            "description": "The user's username"
+          },
+          "given_name": {
+            "type": "string",
+            "example": "john",
+            "description": "The user's given name"
+          },
+          "family_name": {
+            "type": "string",
+            "example": "doe",
+            "description": "The user's family name"
+          },
+          "user_status": {
+            "$ref": "#/definitions/user_status"
+          },
+          "user_role": {
+            "$ref": "#/definitions/user_role"
+          },
+          "apps" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/definitions/apps",
+              "description": "The list of apps that the user is admin"
+            }
+          },
+          "groups" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/definitions/groups",
+              "description": "The list of groups that the user has joined to"
+            }
+          },
+          "created_at": {
+            "$ref": "#/definitions/timestamp"
+          },
+          "updated_at": {
+            "$ref": "#/definitions/timestamp"
+          },
+          "access_token": {
+            "type": "string",
+            "description": "Unique user token used for identification",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...."
+          }
+        }
+      },
+        "timestamp": {
+          "type": "string",
+          "format": "DateTime",
+          "description": "ISO 8601/RFC3339 formatted DateTime",
+          "example": "2016-03-17T16:35:01.000Z"
+        },
+        "user_status": {
             "type" : "string",
-            "example": "activate",
-            "description" : "User Status",
+            "example": "active",
+            "description" : "User status",
             "enum": [
-                "activete",
-                "deactivete"
+                "active",
+                "deactive"
             ]
+        },
+        "user_role": {
+          "type" : "string",
+          "example": "user",
+          "description" : "User role",
+          "enum": [
+            "admin",
+            "user"
+          ]
         },
         "apps": {
             "type": "object",
