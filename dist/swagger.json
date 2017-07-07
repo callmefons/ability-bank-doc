@@ -100,6 +100,7 @@
                 "produces": [
                     "application/json"
                 ],
+                "security":[{"petstore_auth":["write:pets","read:pets"]}],
                 "parameters" : [],
                 "responses": {
                     "200": {
@@ -348,6 +349,15 @@
             ],
             "parameters": [
               {
+                "name": "api_key",
+                "in": "header",
+                "description": "api_key",
+                "required": true,
+                "schema" : {
+                  "$ref": "#/definitions/api_key"
+                }
+              },
+              {
                 "name": "app_id",
                 "in": "path",
                 "required": true,
@@ -390,6 +400,15 @@
             ],
             "parameters": [
               {
+                "name": "api_key",
+                "in": "header",
+                "description": "api_key",
+                "required": true,
+                "schema" : {
+                  "$ref": "#/definitions/api_key"
+                }
+              },
+              {
                 "name": "app_id",
                 "in": "path",
                 "required": true,
@@ -421,6 +440,15 @@
               "application/json"
             ],
             "parameters": [
+              {
+                "name": "api_key",
+                "in": "header",
+                "description": "api_key",
+                "required": true,
+                "schema" : {
+                  "$ref": "#/definitions/api_key"
+                }
+              },
               {
                 "name": "app_id",
                 "in": "path",
@@ -463,6 +491,15 @@
               "application/json"
             ],
             "parameters": [
+              {
+                "name": "api_key",
+                "in": "header",
+                "description": "api_key",
+                "required": true,
+                "schema" : {
+                  "$ref": "#/definitions/api_key"
+                }
+              },
               {
                 "name": "app_id",
                 "in": "path",
@@ -1035,6 +1072,8 @@
           }
       }
     },
+    "securityDefinitions":{"petstore_auth":{"type":"oauth2","authorizationUrl":"http://petstore.swagger.io/oauth/dialog",
+      "flow":"implicit", "scopes":{"write:pets":"modify pets in your account","read:pets":"read your pets"}}},
     "definitions": {
       "api_key": {
         "type": "object",
