@@ -966,7 +966,7 @@
             }
           }
         },
-        "post_app_body": {
+        "post_apps_body": {
           "type": "object",
           "required": [
             "group_name"
