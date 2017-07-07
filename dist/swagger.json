@@ -62,7 +62,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "The user was created. See Response Class below for schema.",
+                        "description": "The user was created. ",
                         "schema": {
                             "type": "object",
                             "required": [
@@ -98,7 +98,7 @@
                 "parameters" : [],
                 "responses": {
                     "200": {
-                        "description": "The users were retrieved. See Response Class below for schema.",
+                        "description": "The users were retrieved. ",
                         "schema": {
                             "type": "array",
                             "items": {
@@ -136,7 +136,7 @@
                 ],
                 "responses": {
                     "201": {
-                        "description": "The user was created. See Response Class below for schema.",
+                        "description": "The user was created. ",
                         "schema": {
                             "$ref": "#/definitions/users_response"
                         }
@@ -162,7 +162,7 @@
             ],
             "responses": {
               "200": {
-                "description": "The users were retrieved. See Response Class below for schema.",
+                "description": "The users were retrieved. ",
                 "schema": {
                   "type": "array",
                   "items": {
@@ -203,7 +203,7 @@
             ],
             "responses": {
               "200":{
-                "description": "The user was updated. See Response Class below for schema.",
+                "description": "The user was updated. ",
                 "schema": {
                   "$ref": "#/definitions/profile_response"
                 }
@@ -245,7 +245,7 @@
                 ],
                 "responses": {
                     "200":{
-                        "description": "The user was updated. See Response Class below for schema.",
+                        "description": "The user was updated. ",
                         "schema": {
                           "type": "object",
                           "properties": {
@@ -276,7 +276,7 @@
             ],
             "responses": {
               "200": {
-                "description": "The users were retrieved. See Response Class below for schema.",
+                "description": "The users were retrieved. ",
                 "schema": {
                   "type": "array",
                   "items": {
@@ -317,7 +317,7 @@
             ],
             "responses": {
               "201": {
-                "description": "The user was created. See Response Class below for schema.",
+                "description": "The user was created. ",
                 "schema": {
                   "$ref": "#/definitions/apps"
                 }
@@ -361,7 +361,7 @@
             ],
             "responses": {
               "200": {
-                "description": "The user was created. See Response Class below for schema.",
+                "description": "The user was created. ",
                 "schema": {
                   "$ref": "#/definitions/apps"
                 }
@@ -394,7 +394,7 @@
             ],
             "responses": {
               "200": {
-                "description": "The app was deleted. See Response Class below for schema."
+                "description": "The app was deleted. "
               },
               "400": {
                 "description": "Invalid request body. The message will vary depending on the cause."
@@ -435,7 +435,7 @@
             ],
             "responses": {
               "201": {
-                "description": "The add was added. See Response Class below for schema.",
+                "description": "The add was added. ",
                 "schema": {
                   "$ref": "#/definitions/apps"
                 }
@@ -477,7 +477,7 @@
             ],
             "responses": {
               "200": {
-                "description": "The user was created. See Response Class below for schema.",
+                "description": "The user was created. ",
                 "schema": {
                   "$ref": "#/definitions/apps"
                 }
@@ -503,7 +503,7 @@
             ],
             "responses": {
               "200": {
-                "description": "The groups were retrieved. See Response Class below for schema.",
+                "description": "The groups were retrieved. ",
                 "schema": {
                   "type": "array",
                   "items": {
@@ -544,7 +544,7 @@
             ],
             "responses": {
               "201": {
-                "description": "The group was created. See Response Class below for schema.",
+                "description": "The group was created. ",
                 "schema": {
                   "$ref": "#/definitions/groups"
                 }
@@ -588,7 +588,7 @@
             ],
             "responses": {
               "200": {
-                "description": "The group was updated. See Response Class below for schema.",
+                "description": "The group was updated. ",
                 "schema": {
                   "$ref": "#/definitions/groups"
                 }
@@ -621,7 +621,7 @@
             ],
             "responses": {
               "200": {
-                "description": "The group was deleted. See Response Class below for schema."
+                "description": "The group was deleted. "
               },
               "400": {
                 "description": "Invalid request body. The message will vary depending on the cause."
@@ -662,7 +662,7 @@
             ],
             "responses": {
               "200": {
-                "description": "The group was updated. See Response Class below for schema.",
+                "description": "The group was updated. ",
                 "schema": {
                   "$ref": "#/definitions/groups"
                 }
@@ -701,7 +701,7 @@
             ],
             "responses": {
               "200": {
-                "description": "The admin was deleted. See Response Class below for schema.",
+                "description": "The admin was deleted. ",
                 "schema": {
                   "$ref": "#/definitions/groups"
                 }
@@ -742,7 +742,7 @@
           ],
           "responses": {
             "200": {
-              "description": "The group was updated. See Response Class below for schema.",
+              "description": "The group was updated. ",
               "schema": {
                 "$ref": "#/definitions/groups"
               }
@@ -781,7 +781,7 @@
           ],
           "responses": {
             "200": {
-              "description": "The admin was deleted. See Response Class below for schema.",
+              "description": "The admin was deleted. ",
               "schema": {
                 "$ref": "#/definitions/groups"
               }
@@ -792,7 +792,7 @@
           }
         }
       },
-        "/scoreTypes": {
+        "/score-types": {
           "get": {
             "description": "Retrieves a list of all score types. Accepts a list of fields to include or exclude.",
             "summary": "List or search score types",
@@ -804,7 +804,7 @@
             ],
             "responses": {
               "200": {
-                "description": "The score types were retrieved. See Response Class below for schema.",
+                "description": "The score types were retrieved. ",
                 "schema": {
                   "type": "array",
                   "items": {
@@ -845,7 +845,7 @@
             ],
             "responses": {
               "201": {
-                "description": "The group was created. See Response Class below for schema.",
+                "description": "The group was created. ",
                 "schema": {
                   "$ref": "#/definitions/score_types"
                 }
@@ -859,7 +859,7 @@
             }
           }
       },
-        "/scoreTypes/{score_types_id}": {
+        "/score-types/{score_types_id}": {
           "patch": {
             "description": "Update a score types.",
             "summary": "Update an score types",
@@ -889,7 +889,7 @@
             ],
             "responses": {
               "200": {
-                "description": "The user was created. See Response Class below for schema.",
+                "description": "The user was created. ",
                 "schema": {
                   "$ref": "#/definitions/score_types"
                 }
@@ -922,7 +922,7 @@
             ],
             "responses": {
               "200": {
-                "description": "The app was deleted. See Response Class below for schema."
+                "description": "The app was deleted. "
               },
               "400": {
                 "description": "Invalid request body. The message will vary depending on the cause."
