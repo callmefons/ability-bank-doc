@@ -71,6 +71,7 @@
                     if (swaggerUi.options.url) {
                         $('#input_baseUrl').val(swaggerUi.options.url);
                     }
+
                     if (swaggerUi.options.apiKey) {
                         $('#input_apiKey').val(swaggerUi.options.apiKey);
                     }
@@ -85,6 +86,7 @@
                 docExpansion: "none",
                 sorter: "alpha"
             });
+
 
             function addApiKeyAuthorization() {
                 var key = encodeURIComponent($('#input_apiKey')[0].value);
