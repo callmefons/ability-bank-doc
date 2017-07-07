@@ -81,12 +81,6 @@
                     },
                     "409": {
                         "description": "Invalid or missing api token"
-                    },
-                    "default": {
-                        "description": "unexpected error",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
                     }
                 }
             }
@@ -266,12 +260,6 @@
                     },
                     "409": {
                         "description": "Invalid or missing api token"
-                    },
-                    "default": {
-                        "description": "unexpected error",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
                     }
                 }
             }
