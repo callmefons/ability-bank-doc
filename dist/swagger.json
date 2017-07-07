@@ -809,9 +809,9 @@
             ],
             "parameters": [
               {
-                "name": "API Key",
+                "name": "api_key",
                 "in": "header",
-                "description": "API Key",
+                "description": "api_key",
                 "required": true,
                 "schema" : {
                   "$ref": "#/definitions/api_key"
@@ -827,15 +827,6 @@
                     "$ref": "#/definitions/score_type"
                   }
                 }
-              },
-              "400": {
-                "description": "Invalid request body. The message will vary depending on the cause."
-              },
-              "401": {
-                "description": "Invalid token."
-              },
-              "404": {
-                "description": "The user does not exist."
               }
             }
           },
@@ -850,9 +841,9 @@
             ],
             "parameters": [
               {
-                "name": "API Key",
+                "name": "api_key",
                 "in": "header",
-                "description": "API Key",
+                "description": "api_key",
                 "required": true,
                 "schema" : {
                   "$ref": "#/definitions/api_key"
@@ -896,16 +887,16 @@
             ],
             "parameters": [
               {
-                "name": "API Key",
+                "name": "api_key",
                 "in": "header",
-                "description": "API Key",
+                "description": "api_key",
                 "required": true,
                 "schema" : {
                   "$ref": "#/definitions/api_key"
                 }
               },
               {
-                "name": "score types id",
+                "name": "score_types_id",
                 "in": "path",
                 "required": true,
                 "description": "The id of the score types to update",
@@ -947,16 +938,16 @@
             ],
             "parameters": [
               {
-                "name": "API Key",
+                "name": "api_key",
                 "in": "header",
-                "description": "API Key",
+                "description": "api_key",
                 "required": true,
                 "schema" : {
                   "$ref": "#/definitions/api_key"
                 }
               },
               {
-                "name": "score type id",
+                "name": "score_types_id",
                 "in": "path",
                 "required": true,
                 "description": "The id of the app to score type",
@@ -988,7 +979,7 @@
             ],
             "parameters": [
               {
-                "name": "score type id",
+                "name": "score_types_id",
                 "in": "path",
                 "required": true,
                 "description": "The id of the score types",
@@ -1051,7 +1042,7 @@
           "_id": {
             "type": "string",
             "example": "MHrHDcEfxjoYZgeFOTE2cBab30RNFh7HgQ....",
-            "description": "API Key"
+            "description": "api_key"
           }
         }
       },
