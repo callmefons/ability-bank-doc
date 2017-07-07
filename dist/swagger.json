@@ -807,6 +807,17 @@
             "produces": [
               "application/json"
             ],
+            "parameters": [
+              {
+                "name": "API Key",
+                "in": "header",
+                "description": "API Key",
+                "required": true,
+                "schema" : {
+                  "$ref": "#/definitions/api_key"
+                }
+              }
+            ],
             "responses": {
               "200": {
                 "description": "The score types were retrieved. ",
@@ -838,6 +849,15 @@
               "application/json"
             ],
             "parameters": [
+              {
+                "name": "API Key",
+                "in": "header",
+                "description": "API Key",
+                "required": true,
+                "schema" : {
+                  "$ref": "#/definitions/api_key"
+                }
+              },
               {
                 "name": "body",
                 "in": "body",
@@ -876,6 +896,15 @@
             ],
             "parameters": [
               {
+                "name": "API Key",
+                "in": "header",
+                "description": "API Key",
+                "required": true,
+                "schema" : {
+                  "$ref": "#/definitions/api_key"
+                }
+              },
+              {
                 "name": "score types id",
                 "in": "path",
                 "required": true,
@@ -908,7 +937,7 @@
             }
           },
           "delete": {
-            "description": "Deletes a score types and all its related assets (score, user, etc) given its id.",
+            "description": "Deletes a score types and all its related assets (apps, etc) given its id.",
             "summary": "Delete an score type",
             "tags": [
               "ScoreTypes"
@@ -917,6 +946,15 @@
               "application/json"
             ],
             "parameters": [
+              {
+                "name": "API Key",
+                "in": "header",
+                "description": "API Key",
+                "required": true,
+                "schema" : {
+                  "$ref": "#/definitions/api_key"
+                }
+              },
               {
                 "name": "score type id",
                 "in": "path",
@@ -955,15 +993,6 @@
                 "required": true,
                 "description": "The id of the score types",
                 "type": "string"
-              },
-              {
-                "name": "body",
-                "in": "body",
-                "description": "The samples on the right show you every attribute that could be used.",
-                "required": true,
-                "schema" : {
-                  "$ref": "#/definitions/user_id"
-                }
               }
             ],
             "responses": {
@@ -1016,6 +1045,16 @@
       }
     },
     "definitions": {
+      "api_key": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "MHrHDcEfxjoYZgeFOTE2cBab30RNFh7HgQ....",
+            "description": "API Key"
+          }
+        }
+      },
       "post_scores_body": {
         "type": "object",
         "required": [
@@ -1369,7 +1408,7 @@
             "example": "used by front-ends and untrusted parties.",
             "description": "Free text description of the app. "
           },
-          "public_key": {
+          "api_key": {
             "type": "string",
             "example": "AaiyAPdpYdesoKnqjj8HJqRn4T5titww",
             "description": "The id of the app"
