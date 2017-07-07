@@ -75,18 +75,7 @@
                 "produces": [
                     "application/json"
                 ],
-
-                "parameters": [
-                  {
-                    "name": "Authorization",
-                    "in": "header",
-                    "description": "access token",
-                    "required": false,
-                    "schema" : {
-                      "type" : "string"
-                    }
-                  }
-                ],
+                "security":[{"Authorization":[]}],
                 "responses": {
                     "200": {
                         "description": "The users were retrieved. ",
@@ -1072,7 +1061,6 @@
         "name":"Authorization"
       }
     },
-  
     "definitions": {
       "api_key": {
         "type": "object",
