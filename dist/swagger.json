@@ -7,8 +7,8 @@
             "name": "MIT"
         }
     },
-    "host": "192.168.11.201:8080",
-    "basePath": "/api/v1",
+    "host": "localhost:4000",
+    "basePath": "/api",
     "schemes": [
         "http"
     ],
@@ -37,34 +37,6 @@
                 "produces": [
                     "application/json"
                 ],
-                "parameters": [
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "description": "The samples on the right show you every attribute that could be used.",
-                        "required": true,
-                        "schema" : {
-                            "type": "object",
-                            "required": [
-                                "email",
-                                "password"
-                            ],
-                            "properties": {
-                                "email": {
-                                    "type": "string",
-                                    "example": "jhon.doe@mail.com",
-                                    "description": "The user's email"
-                                },
-                                "password": {
-                                    "type": "string",
-                                    "minLength": 6,
-                                    "example": "password",
-                                    "description": "The user's password"
-                                }
-                            }
-                        }
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "The user was created. ",
@@ -84,13 +56,16 @@
                     "400": {
                         "description": "Invalid request body. The message will vary depending on the cause."
                     },
+                    "401": {
+                    "description": "Invalid token"
+                  },
                     "409": {
                         "description": "Invalid or missing api token"
                     }
                 }
             }
         },
-        "/users": {
+        "/account/user": {
             "get": {
                 "description": "This endpoint can be used to retrieve a list of users. The Authorization header should be Authorization",
                 "summary": "List or search users",
@@ -100,8 +75,18 @@
                 "produces": [
                     "application/json"
                 ],
-                "security":[{"petstore_auth":["write:pets","read:pets"]}],
-                "parameters" : [],
+
+                "parameters": [
+                  {
+                    "name": "Authorization",
+                    "in": "header",
+                    "description": "access token",
+                    "required": false,
+                    "schema" : {
+                      "type" : "string"
+                    }
+                  }
+                ],
                 "responses": {
                     "200": {
                         "description": "The users were retrieved. ",
@@ -898,16 +883,10 @@
             ],
             "responses": {
               "201": {
-                "description": "The group was created. ",
+                "description": "The score type was created. ",
                 "schema": {
                   "$ref": "#/definitions/score_type"
                 }
-              },
-              "400": {
-                "description": "Invalid request body. The message will vary depending on the cause."
-              },
-              "409": {
-                "description": "The email or username has already been used for another user"
               }
             }
           }
@@ -993,7 +972,10 @@
             ],
             "responses": {
               "200": {
-                "description": "The app was deleted. "
+                "description": "The app was deleted. ",
+                "schema": {
+                  "$ref": "#/definitions/apps"
+                }
               },
               "400": {
                 "description": "Invalid request body. The message will vary depending on the cause."
@@ -1015,6 +997,15 @@
               "application/json"
             ],
             "parameters": [
+              {
+                "name": "api_key",
+                "in": "header",
+                "description": "api_key",
+                "required": true,
+                "schema" : {
+                  "$ref": "#/definitions/api_key"
+                }
+              },
               {
                 "name": "score_types_id",
                 "in": "path",
@@ -1046,6 +1037,15 @@
             ],
             "parameters": [
               {
+                "name": "api_key",
+                "in": "header",
+                "description": "api_key",
+                "required": true,
+                "schema" : {
+                  "$ref": "#/definitions/api_key"
+                }
+              },
+              {
                 "name": "body",
                 "in": "body",
                 "description": "The samples on the right show you every attribute that could be used.",
@@ -1057,23 +1057,22 @@
             ],
             "responses": {
               "201": {
-                "description": "The group was created. ",
+                "description": "The scores was created. ",
                 "schema": {
-                  "$ref": "#/definitions/score_type"
+                  "$ref": "#/definitions/scores"
                 }
-              },
-              "400": {
-                "description": "Invalid request body. The message will vary depending on the cause."
-              },
-              "409": {
-                "description": "The email or username has already been used for another user"
               }
             }
           }
       }
     },
-    "securityDefinitions":{"petstore_auth":{"type":"oauth2","authorizationUrl":"http://petstore.swagger.io/oauth/dialog",
-      "flow":"implicit", "scopes":{"write:pets":"modify pets in your account","read:pets":"read your pets"}}},
+    "securityDefinitions":{
+      "Authorization":{
+        "type":"apiKey","in":"header",
+        "name":"Authorization"
+      }
+    },
+  
     "definitions": {
       "api_key": {
         "type": "object",
@@ -1088,7 +1087,7 @@
       "post_scores_body": {
         "type": "object",
         "required": [
-          "score_type_name"
+          "value"
         ],
         "properties": {
           "value": {
@@ -1096,11 +1095,6 @@
             "format" : "int32",
             "example": 1,
             "description": "value of scores"
-          },
-          "owner_id": {
-            "type": "string",
-            "example": "0RMHrHDcEMHrHDcEfxjoYZgeFONFh7HgQ....",
-            "description": "The user's unique identifier"
           }
         }
       },
@@ -1455,7 +1449,7 @@
               "description": "The list of apps that the user is admin"
             }
           },
-          "score_type" : {
+          "score_types" : {
             "type" : "array",
             "items" : {
               "$ref" : "#/definitions/score_type_id",
@@ -1538,7 +1532,7 @@
               "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ....",
               "description": "The app's unique identifier"
             },
-            "owner": {
+            "owner_id ": {
               "type": "string",
               "example": "FFEDwQdewfpEFEFrHD0RMHrHDch7HgQ....",
               "description": "The user's unique identifier"
@@ -1565,12 +1559,15 @@
               "example": 1,
               "description": "value of scores"
             },
-            "score_type": {
-              "$ref": "#/definitions/score_type_id"
-
+            "score_type_id": {
+              "type": "string",
+              "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ....",
+              "description": "The score types id unique identifier"
             },
-            "owner": {
-              "$ref": "#/definitions/user_id"
+            "owner_id ": {
+              "type": "string",
+              "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ....",
+              "description": "The score types id unique identifier"
             },
             "created_at": {
               "$ref": "#/definitions/timestamp"
