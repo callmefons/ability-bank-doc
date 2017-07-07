@@ -19,6 +19,11 @@
         "application/json"
     ],
     "tags": [
+      {"name":"Authentication","description":"Everything" },
+      {"name":"Users","description":"Everything" },
+      {"name":"Profile","description":"Everything" },
+      {"name":"Apps","description":"Everything" },
+      {"name":"Groups","description":"Everything" },
       {"name":"ScoreTypes","description":"Everything" }
     ],
     "paths": {
