@@ -18,13 +18,16 @@
     "produces": [
         "application/json"
     ],
+    "tags": [
+      {"name":"ScoreTypes","description":"Everything" }
+    ],
     "paths": {
         "auth/login": {
             "post": {
                 "description": "Logs user into the system",
                 "summary": "Login",
                 "tags": [
-                    "authentication"
+                    "Authentication"
                 ],
                 "produces": [
                     "application/json"
@@ -93,7 +96,7 @@
                 "description": "This endpoint can be used to retrieve a list of users. The Authorization header should be Authorization",
                 "summary": "List or search users",
                 "tags": [
-                    "users"
+                    "Users"
                 ],
                 "produces": [
                     "application/json"
@@ -121,7 +124,7 @@
                 "description": "Creates a new user according to the JSON object received in body.",
                 "summary": "Create a user",
                 "tags": [
-                    "users"
+                    "Users"
                 ],
                 "produces": [
                     "application/json"
@@ -158,7 +161,7 @@
             "description": "This endpoint can be used to retrieve user details given the user's id.",
             "summary": "Get a user's profile",
             "tags": [
-              "profile"
+              "Profile"
             ],
             "produces": [
               "application/json"
@@ -188,7 +191,7 @@
             "description": "Updates a user with the object's properties received in the request's body (the object should be a JSON object).",
             "summary": "Update a user's profile",
             "tags": [
-              "profile"
+              "Profile"
             ],
             "produces": [
               "application/json"
@@ -225,7 +228,7 @@
                 "description": "This endpoint can be used to activation a single user based on the id.",
                 "summary": "Activate a user's profile",
                 "tags": [
-                    "profile"
+                    "Profile"
                 ],
                 "produces": [
                     "application/json"
@@ -272,9 +275,727 @@
                     }
                 }
             }
+        },
+        "/apps": {
+          "get": {
+            "description": "Retrieves a list of all applications. Accepts a list of fields to include or exclude.",
+            "summary": "List or search apps",
+            "tags": [
+              "Apps"
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "responses": {
+              "200": {
+                "description": "The users were retrieved. See Response Class below for schema.",
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/apps"
+                  }
+                }
+              },
+              "400": {
+                "description": "Invalid request body. The message will vary depending on the cause."
+              },
+              "401": {
+                "description": "Invalid token."
+              },
+              "404": {
+                "description": "The user does not exist."
+              }
+            }
+          },
+          "post": {
+            "description": "Creates a new application.",
+            "summary": "Create an app",
+            "tags": [
+              "Apps"
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "parameters": [
+              {
+                "name": "body",
+                "in": "body",
+                "description": "The samples on the right show you every attribute that could be used.",
+                "required": true,
+                "schema" : {
+                  "$ref": "#/definitions/post_apps_body"
+                }
+              }
+            ],
+            "responses": {
+              "201": {
+                "description": "The user was created. See Response Class below for schema.",
+                "schema": {
+                  "$ref": "#/definitions/apps"
+                }
+              },
+              "400": {
+                "description": "Invalid request body. The message will vary depending on the cause."
+              },
+              "409": {
+                "description": "The email or username has already been used for another user"
+              }
+            }
+          }
+        },
+        "/apps/{app_id}":{
+          "patch": {
+            "description": "Update an application.",
+            "summary": "Update an app",
+            "tags": [
+              "Apps"
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "parameters": [
+              {
+                "name": "app_id",
+                "in": "path",
+                "required": true,
+                "description": "The id of the app to update",
+                "type": "string"
+              },
+              {
+                "name": "body",
+                "in": "body",
+                "description": "The samples on the right show you every attribute that could be used.",
+                "required": true,
+                "schema" : {
+                  "$ref": "#/definitions/post_apps_body"
+                }
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "The user was created. See Response Class below for schema.",
+                "schema": {
+                  "$ref": "#/definitions/apps"
+                }
+              },
+              "400": {
+                "description": "Invalid request body. The message will vary depending on the cause."
+              },
+              "409": {
+                "description": "The email or username has already been used for another user"
+              }
+            }
+          },
+          "delete": {
+            "description": "Deletes am app and all its related assets (admin, scores, etc) given its id.",
+            "summary": "Delete an app",
+            "tags": [
+              "Apps"
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "parameters": [
+              {
+                "name": "app_id",
+                "in": "path",
+                "required": true,
+                "description": "The id of the app to update",
+                "type": "string"
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "The app was deleted. See Response Class below for schema."
+              },
+              "400": {
+                "description": "Invalid request body. The message will vary depending on the cause."
+              },
+              "409": {
+                "description": "The email or username has already been used for another user"
+              }
+            }
+          }
+        },
+        "/apps/{app_id}/admins":{
+          "post": {
+            "description": "Creates a new admin.",
+            "summary": "Create an admin",
+            "tags": [
+              "Apps"
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "parameters": [
+              {
+                "name": "app_id",
+                "in": "path",
+                "required": true,
+                "description": "The id of the app",
+                "type": "string"
+              },
+              {
+                "name": "body",
+                "in": "body",
+                "description": "The samples on the right show you every attribute that could be used.",
+                "required": true,
+                "schema" : {
+                  "$ref": "#/definitions/user_id"
+                }
+              }
+            ],
+            "responses": {
+              "201": {
+                "description": "The add was added. See Response Class below for schema.",
+                "schema": {
+                  "$ref": "#/definitions/apps"
+                }
+              },
+              "400": {
+                "description": "Invalid request body. The message will vary depending on the cause."
+              },
+              "409": {
+                "description": "The email or username has already been used for another user"
+              }
+            }
+          },
+          "delete": {
+            "description": "Deletes an admin given its id.",
+            "summary": "Delete an admin",
+            "tags": [
+              "Apps"
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "parameters": [
+              {
+                "name": "app_id",
+                "in": "path",
+                "required": true,
+                "description": "The id of the app",
+                "type": "string"
+              },
+              {
+                "name": "body",
+                "in": "body",
+                "description": "The samples on the right show you every attribute that could be used.",
+                "required": true,
+                "schema" : {
+                  "$ref": "#/definitions/user_id"
+                }
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "The user was created. See Response Class below for schema.",
+                "schema": {
+                  "$ref": "#/definitions/apps"
+                }
+              },
+              "400": {
+                "description": "Invalid request body. The message will vary depending on the cause."
+              },
+              "409": {
+                "description": "The email or username has already been used for another user"
+              }
+            }
+          }
+        },
+        "/groups": {
+          "get": {
+            "description": "Retrieves a list of all groups. Accepts a list of fields to include or exclude.",
+            "summary": "List or search groups",
+            "tags": [
+              "Groups"
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "responses": {
+              "200": {
+                "description": "The groups were retrieved. See Response Class below for schema.",
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/groups"
+                  }
+                }
+              },
+              "400": {
+                "description": "Invalid request body. The message will vary depending on the cause."
+              },
+              "401": {
+                "description": "Invalid token."
+              },
+              "404": {
+                "description": "The user does not exist."
+              }
+            }
+          },
+          "post": {
+            "description": "Creates a new group.",
+            "summary": "Create a group",
+            "tags": [
+              "Groups"
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "parameters": [
+              {
+                "name": "body",
+                "in": "body",
+                "description": "The samples on the right show you every attribute that could be used.",
+                "required": true,
+                "schema" : {
+                  "$ref": "#/definitions/post_groups_body"
+                }
+              }
+            ],
+            "responses": {
+              "201": {
+                "description": "The group was created. See Response Class below for schema.",
+                "schema": {
+                  "$ref": "#/definitions/groups"
+                }
+              },
+              "400": {
+                "description": "Invalid request body. The message will vary depending on the cause."
+              },
+              "409": {
+                "description": "The email or username has already been used for another user"
+              }
+            }
+          }
+        },
+        "/groups/{group_id}": {
+          "patch": {
+            "description": "Updates a group.",
+            "summary": "Update an group",
+            "tags": [
+              "Groups"
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "parameters": [
+              {
+                "name": "group_id",
+                "in": "path",
+                "required": true,
+                "description": "The id of the group to update",
+                "type": "string"
+              },
+              {
+                "name": "body",
+                "in": "body",
+                "description": "The samples on the right show you every attribute that could be used.",
+                "required": true,
+                "schema" : {
+                  "$ref": "#/definitions/post_groups_body"
+                }
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "The group was updated. See Response Class below for schema.",
+                "schema": {
+                  "$ref": "#/definitions/groups"
+                }
+              },
+              "400": {
+                "description": "Invalid request body. The message will vary depending on the cause."
+              },
+              "409": {
+                "description": "The email or username has already been used for another user"
+              }
+            }
+          },
+          "delete": {
+            "description": "Deletes a group and all its related assets (admins, users, etc) given its id.",
+            "summary": "Delete a group",
+            "tags": [
+              "Groups"
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "parameters": [
+              {
+                "name": "group_id",
+                "in": "path",
+                "required": true,
+                "description": "The id of the group",
+                "type": "string"
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "The group was deleted. See Response Class below for schema."
+              },
+              "400": {
+                "description": "Invalid request body. The message will vary depending on the cause."
+              },
+              "409": {
+                "description": "The email or username has already been used for another user"
+              }
+            }
+          }
+        },
+        "/groups/{group_id}/admins":{
+          "post": {
+            "description": "Creates a new admin to group.",
+            "summary": "Create a admin",
+            "tags": [
+              "Groups"
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "parameters": [
+              {
+                "name": "group_id",
+                "in": "path",
+                "required": true,
+                "description": "The id of the group",
+                "type": "string"
+              },
+              {
+                "name": "body",
+                "in": "body",
+                "description": "The samples on the right show you every attribute that could be used.",
+                "required": true,
+                "schema" : {
+                  "$ref": "#/definitions/user_id"
+                }
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "The group was updated. See Response Class below for schema.",
+                "schema": {
+                  "$ref": "#/definitions/groups"
+                }
+              },
+              "400": {
+                "description": "Invalid request body. The message will vary depending on the cause."
+              }
+            }
+          },
+          "delete": {
+            "description": "Deletes an admin given its id.",
+            "summary": "Delete an admin",
+            "tags": [
+              "Groups"
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "parameters": [
+              {
+                "name": "group_id",
+                "in": "path",
+                "required": true,
+                "description": "The id of the group",
+                "type": "string"
+              },
+              {
+                "name": "body",
+                "in": "body",
+                "description": "The samples on the right show you every attribute that could be used.",
+                "required": true,
+                "schema" : {
+                  "$ref": "#/definitions/user_id"
+                  }
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "The admin was deleted. See Response Class below for schema.",
+                "schema": {
+                  "$ref": "#/definitions/groups"
+                }
+              },
+              "400": {
+                "description": "Invalid request body. The message will vary depending on the cause."
+              }
+            }
+          }
+      },
+        "/groups/{group_id}/members":{
+          "post": {
+          "description": "Creates a new member to group.",
+          "summary": "Create a member",
+          "tags": [
+            "Groups"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "group_id",
+              "in": "path",
+              "required": true,
+              "description": "The id of the group",
+              "type": "string"
+            },
+            {
+              "name": "body",
+              "in": "body",
+              "description": "The samples on the right show you every attribute that could be used.",
+              "required": true,
+              "schema" : {
+                "$ref": "#/definitions/user_id"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "The group was updated. See Response Class below for schema.",
+              "schema": {
+                "$ref": "#/definitions/groups"
+              }
+            },
+            "400": {
+              "description": "Invalid request body. The message will vary depending on the cause."
+            }
+          }
+        },
+          "delete": {
+          "description": "Deletes a member given its id.",
+          "summary": "Delete a member",
+          "tags": [
+            "Groups"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "group_id",
+              "in": "path",
+              "required": true,
+              "description": "The id of the group",
+              "type": "string"
+            },
+            {
+              "name": "body",
+              "in": "body",
+              "description": "The samples on the right show you every attribute that could be used.",
+              "required": true,
+              "schema" : {
+                "$ref": "#/definitions/user_id"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "The admin was deleted. See Response Class below for schema.",
+              "schema": {
+                "$ref": "#/definitions/groups"
+              }
+            },
+            "400": {
+              "description": "Invalid request body. The message will vary depending on the cause."
+            }
+          }
         }
+      },
+        "/score-types": {
+          "get": {
+            "description": "Retrieves a list of all score types. Accepts a list of fields to include or exclude.",
+            "summary": "List or search score types",
+            "tags": [
+              "ScoreTypes"
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "responses": {
+              "200": {
+                "description": "The score types were retrieved. See Response Class below for schema.",
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/score_types"
+                  }
+                }
+              },
+              "400": {
+                "description": "Invalid request body. The message will vary depending on the cause."
+              },
+              "401": {
+                "description": "Invalid token."
+              },
+              "404": {
+                "description": "The user does not exist."
+              }
+            }
+          },
+          "post": {
+            "description": "Creates a new score types.",
+            "summary": "Create a score types",
+            "tags": [
+              "ScoreTypes"
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "parameters": [
+              {
+                "name": "body",
+                "in": "body",
+                "description": "The samples on the right show you every attribute that could be used.",
+                "required": true,
+                "schema" : {
+                  "$ref": "#/definitions/post_score_types_body"
+                }
+              }
+            ],
+            "responses": {
+              "201": {
+                "description": "The group was created. See Response Class below for schema.",
+                "schema": {
+                  "$ref": "#/definitions/score_types"
+                }
+              },
+              "400": {
+                "description": "Invalid request body. The message will vary depending on the cause."
+              },
+              "409": {
+                "description": "The email or username has already been used for another user"
+              }
+            }
+          }
+      },
+        "/score-types/{score_types_id}": {
+          "patch": {
+            "description": "Update a score types.",
+            "summary": "Update an score types",
+            "tags": [
+              "ScoreTypes"
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "parameters": [
+              {
+                "name": "score types id",
+                "in": "path",
+                "required": true,
+                "description": "The id of the score types to update",
+                "type": "string"
+              },
+              {
+                "name": "body",
+                "in": "body",
+                "description": "The samples on the right show you every attribute that could be used.",
+                "required": true,
+                "schema" : {
+                  "$ref": "#/definitions/post_score_types_body"
+                }
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "The user was created. See Response Class below for schema.",
+                "schema": {
+                  "$ref": "#/definitions/score_types"
+                }
+              },
+              "400": {
+                "description": "Invalid request body. The message will vary depending on the cause."
+              },
+              "409": {
+                "description": "The email or username has already been used for another user"
+              }
+            }
+          },
+          "delete": {
+            "description": "Deletes a score types and all its related assets (score, user, etc) given its id.",
+            "summary": "Delete an score type",
+            "tags": [
+              "Apps"
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "parameters": [
+              {
+                "name": "app_id",
+                "in": "path",
+                "required": true,
+                "description": "The id of the app to score type",
+                "type": "string"
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "The app was deleted. See Response Class below for schema."
+              },
+              "400": {
+                "description": "Invalid request body. The message will vary depending on the cause."
+              },
+              "409": {
+                "description": "The email or username has already been used for another user"
+              }
+            }
+          }
+      }
     },
     "definitions": {
+      "post_score_types_body": {
+        "type": "object",
+        "required": [
+          "score_types_name"
+        ],
+        "properties": {
+          "score_types_name": {
+            "type": "string",
+            "example": "John's score",
+            "description": "The name of the score types"
+          }
+        }
+      },
+        "post_groups_body": {
+          "type": "object",
+          "required": [
+            "app_name"
+          ],
+          "properties": {
+            "group_name": {
+              "type": "string",
+              "example": "My Company",
+              "description": "The name of the group"
+            },
+            "group_description": {
+              "type": "string",
+              "example": "https://mycompany.org",
+              "description": "Free text description of the group."
+            }
+          }
+        },
+        "post_app_body": {
+          "type": "object",
+          "required": [
+            "group_name"
+          ],
+          "properties": {
+            "app_name": {
+              "type": "string",
+              "example": "My application",
+              "description": "The name of the app"
+            },
+            "app_description": {
+              "type": "string",
+              "example": "used by front-ends and untrusted parties.",
+              "description": "Free text description of the app. "
+            }
+          }
+        },
         "post_users_body": {
             "type": "object",
             "required": [
@@ -422,14 +1143,14 @@
           "apps" : {
             "type" : "array",
             "items" : {
-              "$ref" : "#/definitions/apps",
+              "$ref" : "#/definitions/app_id",
               "description": "The list of apps that the user is admin"
             }
           },
           "groups" : {
             "type" : "array",
             "items" : {
-              "$ref" : "#/definitions/groups",
+              "$ref" : "#/definitions/group_id",
               "description": "The list of groups that the user has joined to"
             }
           },
@@ -470,7 +1191,47 @@
             "user"
           ]
         },
-        "apps": {
+        "user_id": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string",
+              "example": "0RMHrHDcEMHrHDcEfxjoYZgeFONFh7HgQ....",
+              "description": "The user's unique identifier"
+            }
+          }
+        },
+        "admin_id": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "0RMHrHDcEMHrHDcEfxjoYZgeFONFh7HgQ....",
+            "description": "The user's unique identifier"
+          }
+        }
+      },
+        "scores_id": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string",
+              "example": "MHrHDcEfxjoYZgeFOTE2cBab30RNFh7HgQ....",
+              "description": "The score type's unique identifier"
+            }
+          }
+        },
+        "score_types_id": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string",
+              "example": "MHrHDcEfxjoYZgeFOTE2cBab30RNFh7HgQ....",
+              "description": "The score type's unique identifier"
+            }
+          }
+        },
+        "app_id": {
             "type": "object",
             "properties": {
                 "_id": {
@@ -480,7 +1241,7 @@
                 }
             }
         },
-        "groups": {
+        "group_id": {
             "type": "object",
             "properties": {
                 "_id": {
@@ -490,20 +1251,152 @@
                 }
             }
         },
-        "Error": {
-            "required": [
-                "code",
-                "message"
-            ],
-            "properties": {
-                "code": {
-                    "type": "integer",
-                    "format": "int32"
-                },
-                "message": {
-                    "type": "string"
-                }
+        "apps": {
+          "type": "object",
+          "properties": {
+          "_id": {
+            "type": "string",
+            "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ....",
+            "description": "The app's unique identifier"
+          },
+          "app_name": {
+            "type": "string",
+            "example": "My application",
+            "description": "The name of the app"
+          },
+          "app_description": {
+            "type": "string",
+            "example": "used by front-ends and untrusted parties.",
+            "description": "Free text description of the app. "
+          },
+          "public_key": {
+            "type": "string",
+            "example": "AaiyAPdpYdesoKnqjj8HJqRn4T5titww",
+            "description": "The id of the app"
+          },
+          "secret_key": {
+            "type": "string",
+            "example": "MG_TNT2ver-SylNat-_VeMmd-4m0Wab",
+            "description": "The app secret, it must not be public"
+          },
+          "admins" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/definitions/admin_id",
+              "description": "The list of apps that the user is admin"
             }
+          },
+          "score_types" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/definitions/score_types_id",
+              "description": "The list of apps that the user is admin"
+            }
+          },
+          "created_at": {
+            "$ref": "#/definitions/timestamp"
+          },
+          "updated_at": {
+            "$ref": "#/definitions/timestamp"
+          }
         }
+      },
+        "groups": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ....",
+            "description": "The group's unique identifier"
+          },
+          "group_name": {
+            "type": "string",
+            "example": "My Company",
+            "description": "The name of the group"
+          },
+          "group_description": {
+            "type": "string",
+            "example": "https://mycompany.org",
+            "description": "Free text description of the group."
+          },
+          "admins" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/definitions/admin_id",
+              "description": "The list of admins that the user is admin"
+            }
+          },
+          "members" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/definitions/user_id",
+              "description": "The list of members that the user is member"
+            }
+          },
+          "created_at": {
+            "$ref": "#/definitions/timestamp"
+          },
+          "updated_at": {
+            "$ref": "#/definitions/timestamp"
+          }
+        }
+      },
+        "score_types": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string",
+              "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ....",
+              "description": "The group's unique identifier"
+            },
+            "score_types_name": {
+              "type": "string",
+              "example": "John's score",
+              "description": "The name of the score types"
+            },
+            "scores" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/scores_id",
+                "description": "The list of scores"
+              }
+            },
+            "created_at": {
+              "$ref": "#/definitions/timestamp"
+            },
+            "updated_at": {
+              "$ref": "#/definitions/timestamp"
+            }
+          }
+      },
+        "scores": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string",
+              "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ....",
+              "description": "The score types id unique identifier"
+            },
+            "value": {
+              "type" : "integer",
+              "format" : "int32",
+              "example": 1,
+              "description": "value of scores"
+            },
+            "score_types": {
+              "$ref": "#/definitions/score_types_id"
+
+            },
+            "owner": {
+              "$ref": "#/definitions/user_id"
+            },
+            "created_at": {
+              "$ref": "#/definitions/timestamp"
+            },
+            "updated_at": {
+              "$ref": "#/definitions/timestamp"
+            }
+          }
+      }
     }
 }
