@@ -22,7 +22,7 @@
       {"name":"ScoreTypes","description":"Everything" }
     ],
     "paths": {
-        "auth/login": {
+        "/auth/login": {
             "post": {
                 "description": "Logs user into the system",
                 "summary": "Login",
