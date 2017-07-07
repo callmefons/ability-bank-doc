@@ -792,7 +792,7 @@
           }
         }
       },
-        "/score-types": {
+        "/scoreTypes": {
           "get": {
             "description": "Retrieves a list of all score types. Accepts a list of fields to include or exclude.",
             "summary": "List or search score types",
@@ -859,7 +859,7 @@
             }
           }
       },
-        "/score-types/{score_types_id}": {
+        "/scoreTypes/{score_types_id}": {
           "patch": {
             "description": "Update a score types.",
             "summary": "Update an score types",
