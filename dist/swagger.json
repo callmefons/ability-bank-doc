@@ -37,6 +37,34 @@
                 "produces": [
                     "application/json"
                 ],
+                "parameters": [
+                  {
+                    "name": "body",
+                    "in": "body",
+                    "description": "The samples on the right show you every attribute that could be used.",
+                    "required": true,
+                    "schema" : {
+                      "type": "object",
+                      "required": [
+                        "email",
+                        "password"
+                      ],
+                      "properties": {
+                        "email": {
+                          "type": "string",
+                          "example": "jhon.doe@mail.com",
+                          "description": "The user's email"
+                        },
+                        "password": {
+                          "type": "string",
+                          "minLength": 6,
+                          "example": "password",
+                          "description": "The user's password"
+                        }
+                      }
+                    }
+                  }
+                ],
                 "responses": {
                     "200": {
                         "description": "The user was created. ",
@@ -75,7 +103,7 @@
                 "produces": [
                     "application/json"
                 ],
-                "security":[{"Authorization":[]}],
+                "parameters" : [],
                 "responses": {
                     "200": {
                         "description": "The users were retrieved. ",
@@ -539,8 +567,8 @@
             }
           },
           "post": {
-            "description": "Creates a new group.",
-            "summary": "Create a group",
+            "description": "Creates new group.",
+            "summary": "Create group",
             "tags": [
               "Groups"
             ],
@@ -576,8 +604,8 @@
         },
         "/groups/{group_id}": {
           "patch": {
-            "description": "Updates a group.",
-            "summary": "Update an group",
+            "description": "Updates group.",
+            "summary": "Update group",
             "tags": [
               "Groups"
             ],
@@ -618,8 +646,8 @@
             }
           },
           "delete": {
-            "description": "Deletes a group and all its related assets (admins, users, etc) given its id.",
-            "summary": "Delete a group",
+            "description": "Deletes group and all its related assets (admins, users, etc) given its id.",
+            "summary": "Delete group",
             "tags": [
               "Groups"
             ],
@@ -650,8 +678,8 @@
         },
         "/groups/{group_id}/admins":{
           "post": {
-            "description": "Creates a new admin to group.",
-            "summary": "Create a admin",
+            "description": "Add admins to group.",
+            "summary": "Add admins",
             "tags": [
               "Groups"
             ],
@@ -687,51 +715,12 @@
                 "description": "Invalid request body. The message will vary depending on the cause."
               }
             }
-          },
-          "delete": {
-            "description": "Deletes an admin given its id.",
-            "summary": "Delete an admin",
-            "tags": [
-              "Groups"
-            ],
-            "produces": [
-              "application/json"
-            ],
-            "parameters": [
-              {
-                "name": "group_id",
-                "in": "path",
-                "required": true,
-                "description": "The id of the group",
-                "type": "string"
-              },
-              {
-                "name": "body",
-                "in": "body",
-                "description": "The samples on the right show you every attribute that could be used.",
-                "required": true,
-                "schema" : {
-                  "$ref": "#/definitions/user_id"
-                  }
-              }
-            ],
-            "responses": {
-              "200": {
-                "description": "The admin was deleted. ",
-                "schema": {
-                  "$ref": "#/definitions/groups"
-                }
-              },
-              "400": {
-                "description": "Invalid request body. The message will vary depending on the cause."
-              }
-            }
           }
       },
         "/groups/{group_id}/members":{
           "post": {
-          "description": "Creates a new member to group.",
-          "summary": "Create a member",
+          "description": "Add members to group.",
+          "summary": "Add members",
           "tags": [
             "Groups"
           ],
@@ -769,8 +758,8 @@
           }
         },
           "delete": {
-          "description": "Deletes a member given its id.",
-          "summary": "Delete a member",
+          "description": "Leave group",
+          "summary": "Leave group",
           "tags": [
             "Groups"
           ],
@@ -784,15 +773,6 @@
               "required": true,
               "description": "The id of the group",
               "type": "string"
-            },
-            {
-              "name": "body",
-              "in": "body",
-              "description": "The samples on the right show you every attribute that could be used.",
-              "required": true,
-              "schema" : {
-                "$ref": "#/definitions/user_id"
-              }
             }
           ],
           "responses": {
@@ -1055,12 +1035,8 @@
           }
       }
     },
-    "securityDefinitions":{
-      "Authorization":{
-        "type":"apiKey","in":"header",
-        "name":"Authorization"
-      }
-    },
+    "securityDefinitions":{"petstore_auth":{"type":"oauth2","authorizationUrl":"http://petstore.swagger.io/oauth/dialog",
+      "flow":"implicit", "scopes":{"write:pets":"modify pets in your account","read:pets":"read your pets"}}},
     "definitions": {
       "api_key": {
         "type": "object",
