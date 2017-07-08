@@ -41,7 +41,7 @@
     "paths": {
         "/auth/login": {
             "post": {
-                "description": "Logs user into the system",
+                "description": "Logs user into the system <code>http://localhost:8080/swagger.json</code>",
                 "summary": "Login",
                 "tags": [
                     "Authentication"
@@ -422,7 +422,9 @@
             "responses": {
               "200": {
                 "description": "The app was deleted.",
-                "$ref": "#/definitions/status"
+                "schema": {
+                  "$ref": "#/definitions/status"
+                }
               },
               "400": {
                 "description": "Invalid request body. The message will vary depending on the cause."
@@ -617,7 +619,9 @@
             "responses": {
               "200": {
                 "description": "The group was deleted.",
-                "$ref": "#/definitions/status"
+                "schema": {
+                  "$ref": "#/definitions/status"
+                }
               },
               "400": {
                 "description": "Invalid request body. The message will vary depending on the cause."
@@ -782,7 +786,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/definitions/score_type"
+                    "$ref": "#/definitions/get_score_type_response"
                   }
                 }
               },
@@ -840,6 +844,51 @@
           }
       },
         "/score-types/{score_type_id}": {
+          "get": {
+            "description": "Get score type by Id",
+            "summary": "Get score type by Id",
+            "tags": [
+              "ScoreTypes"
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "parameters": [
+              {
+                "name": "api_key",
+                "in": "header",
+                "description": "api_key",
+                "required": true,
+                "schema" : {
+                  "$ref": "#/definitions/api_key"
+                }
+              },
+              {
+                "name": "score_type_id",
+                "in": "path",
+                "required": true,
+                "description": "The id of the score types to update",
+                "type": "string"
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "The score types were retrieved. ",
+                "schema": {
+                  "$ref": "#/definitions/get_score_type_response"
+                }
+              },
+              "404": {
+                "description": "The score types does not exits.",
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/score_type"
+                  }
+                }
+              }
+            }
+          },
           "patch": {
             "description": "Update a score types.",
             "summary": "Update an score types",
@@ -1034,7 +1083,7 @@
         "properties": {
           "_id": {
             "type": "string",
-            "example": "MHrHDcEfxjoYZgeFOTE2cBab30RNFh7HgQ....",
+            "example": "MHrHDcEfxjoYZgeFOTE2cBab30RNFh7HgQ",
             "description": "api_key"
           }
         }
@@ -1042,6 +1091,8 @@
         "post_scores_body": {
         "type": "object",
         "required": [
+          "score_type_id",
+          "owner_id",
           "value"
         ],
         "properties": {
@@ -1049,6 +1100,11 @@
             "type" : "string",
             "example": "59608228a3f8735325e7e297",
             "description": "The id of score type"
+          },
+          "owner_id": {
+            "type": "string",
+            "example": "0RMHrHDcEMHrHDcEfxjoYZgeFONFh7HgQ",
+            "description": "The id of user"
           },
           "value": {
             "type" : "integer",
@@ -1061,9 +1117,15 @@
         "post_score_type_body": {
         "type": "object",
         "required": [
-          "score_type_name"
+          "score_type_name",
+          "owner_id"
         ],
         "properties": {
+          "owner_id": {
+            "type": "string",
+            "example": "5960e225dd2ecec9d2f441bf",
+            "description": "The id of user"
+          },
           "score_type_name": {
             "type": "string",
             "example": "John's score",
@@ -1323,21 +1385,43 @@
           "apps" : {
             "type" : "array",
             "items" : {
-              "$ref" : "#/definitions/app_id",
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+                  "description": "The app's unique identifier"
+                },
+                "app_name": {
+                  "type": "string",
+                  "example": "My application",
+                  "description": "The name of the app"
+                },
+                "api_key": {
+                  "type": "string",
+                  "example": "AaiyAPdpYdesoKnqjj8HJqRn4T5titww",
+                  "description": "The id of the app"
+                }
+              },
               "description": "The list of apps that the user is admin"
             }
           },
           "groups" : {
             "type" : "array",
             "items" : {
-              "$ref" : "#/definitions/group_id",
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+                  "description": "The app's unique identifier"
+                },
+                "group_name": {
+                  "type": "string",
+                  "example": "My Company",
+                  "description": "The name of the group"
+                }
+              },
               "description": "The list of groups that the user has joined to"
             }
-          },
-          "access_token": {
-            "type": "string",
-            "description": "Unique user token used for identification",
-            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...."
           }
         }
       },
@@ -1379,7 +1463,7 @@
           "properties": {
             "_id": {
               "type": "string",
-              "example": "0RMHrHDcEMHrHDcEfxjoYZgeFONFh7HgQ....",
+              "example": "0RMHrHDcEMHrHDcEfxjoYZgeFONFh7HgQ",
               "description": "The user's unique identifier"
             }
           }
@@ -1389,7 +1473,7 @@
         "properties": {
           "_id": {
             "type": "string",
-            "example": "0RMHrHDcEMHrHDcEfxjoYZgeFONFh7HgQ....",
+            "example": "0RMHrHDcEMHrHDcEfxjoYZgeFONFh7HgQ",
             "description": "The user's unique identifier"
           }
         }
@@ -1399,7 +1483,7 @@
           "properties": {
             "_id": {
               "type": "string",
-              "example": "MHrHDcEfxjoYZgeFOTE2cBab30RNFh7HgQ....",
+              "example": "MHrHDcEfxjoYZgeFOTE2cBab30RNFh7HgQ",
               "description": "The score type's unique identifier"
             }
           }
@@ -1409,7 +1493,7 @@
           "properties": {
             "_id": {
               "type": "string",
-              "example": "MHrHDcEfxjoYZgeFOTE2cBab30RNFh7HgQ....",
+              "example": "MHrHDcEfxjoYZgeFOTE2cBab30RNFh7HgQ",
               "description": "The score type's unique identifier"
             }
           }
@@ -1419,7 +1503,7 @@
             "properties": {
                 "_id": {
                     "type": "string",
-                    "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ....",
+                    "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
                     "description": "The app's unique identifier"
                 }
             }
@@ -1429,7 +1513,7 @@
             "properties": {
                 "_id": {
                     "type": "string",
-                    "example": "FtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9....",
+                    "example": "FtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9",
                     "description": "The group's unique identifier"
                 }
             }
@@ -1439,7 +1523,7 @@
           "properties": {
           "_id": {
             "type": "string",
-            "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ....",
+            "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
             "description": "The app's unique identifier"
           },
           "app_name": {
@@ -1489,7 +1573,7 @@
         "properties": {
           "_id": {
             "type": "string",
-            "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ....",
+            "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
             "description": "The group's unique identifier"
           },
           "group_name": {
@@ -1524,12 +1608,63 @@
           }
         }
       },
+        "get_score_type_response": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+            "description": "The group's unique identifier"
+          },
+          "score_type_name": {
+            "type": "string",
+            "example": "John's score",
+            "description": "The name of the score types"
+          },
+          "scores" : {
+            "type" : "array",
+            "items" : {
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+                  "description": "The group's unique identifier"
+                },
+                "owner_id ": {
+                  "type": "string",
+                  "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+                  "description": "The score types id unique identifier"
+                }
+              }
+            }
+          },
+          "score_type_status": {
+            "$ref": "#/definitions/score_type_status"
+          },
+          "app_id": {
+            "type": "string",
+            "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+            "description": "The app's unique identifier"
+          },
+          "owner_id ": {
+            "type": "string",
+            "example": "FFEDwQdewfpEFEFrHD0RMHrHDch7HgQ",
+            "description": "The user's unique identifier"
+          },
+          "created_at": {
+            "$ref": "#/definitions/timestamp"
+          },
+          "updated_at": {
+            "$ref": "#/definitions/timestamp"
+          }
+        }
+      },
         "score_type": {
           "type": "object",
           "properties": {
             "_id": {
               "type": "string",
-              "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ....",
+              "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
               "description": "The group's unique identifier"
             },
             "score_type_name": {
@@ -1549,12 +1684,12 @@
             },
             "app_id": {
               "type": "string",
-              "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ....",
+              "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
               "description": "The app's unique identifier"
             },
             "owner_id ": {
               "type": "string",
-              "example": "FFEDwQdewfpEFEFrHD0RMHrHDch7HgQ....",
+              "example": "FFEDwQdewfpEFEFrHD0RMHrHDch7HgQ",
               "description": "The user's unique identifier"
             },
             "created_at": {
@@ -1570,23 +1705,28 @@
           "properties": {
             "_id": {
               "type": "string",
-              "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ....",
+              "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
               "description": "The score types id unique identifier"
             },
             "value": {
               "type" : "integer",
               "format" : "int32",
               "example": 1,
-              "description": "value of scores"
+              "description": "username of user's score"
+            },
+            "username": {
+              "type" : "straing",
+              "example": "Jhon",
+              "description": "name of scores"
             },
             "score_type_id": {
               "type": "string",
-              "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ....",
+              "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
               "description": "The score types id unique identifier"
             },
             "owner_id ": {
               "type": "string",
-              "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ....",
+              "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
               "description": "The score types id unique identifier"
             },
             "created_at": {

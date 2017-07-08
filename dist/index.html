@@ -68,6 +68,7 @@
                         hljs.highlightBlock(e)
                     });
 
+
                     if (swaggerUi.options.url) {
                         $('#input_baseUrl').val(swaggerUi.options.url);
                     }
@@ -105,6 +106,7 @@
              */
 
             window.swaggerUi.load();
+
 
             function log() {
                 if ('console' in window) {
@@ -204,27 +206,30 @@
 </head>
 
 <body class="page-docs" style="zoom: 1;">
-<!--<header class="site-header">-->
-    <!--<nav role="navigation" class="navbar navbar-default">-->
-        <!--<div class="container">-->
-            <!--<div class="navbar-header">-->
-                <!--<button type="button" data-toggle="collapse" data-target="#navbar-collapse" class="navbar-toggle"><span-->
-                        <!--class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span-->
-                        <!--class="icon-bar"></span><span class="icon-bar"></span></button>-->
-                <!--&lt;!&ndash;<h1 class="navbar-brand"><a href="http://swagger.io"><span>swagger explorer</span></a></h1>&ndash;&gt;-->
-            <!--</div>-->
-            <!--<div id="navbar-collapse" class="collapse navbar-collapse">-->
-                <!--<ul class="nav navbar-nav navbar-left">-->
-                    <!--<li class="li-why"><a href="http://swagger.io" style="font-size: 25px; padding-left: 0px">Swagger-->
-                        <!--explorer</a></li>-->
+<header class="site-header">
+    <nav role="navigation" class="navbar navbar-default">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" data-toggle="collapse" data-target="#navbar-collapse" class="navbar-toggle"><span
+                        class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span
+                        class="icon-bar"></span><span class="icon-bar"></span></button>
+                <h1 class="navbar-brand"><a href="http://swagger.io"><span>swagger explorer</span></a></h1>
+            </div>
+            <div id="navbar-collapse" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav navbar-left">
+                    <li class="li-why"><a href="http://swagger.io" style="font-size: 25px; padding-left: 0px">Swagger
+                        explorer</a></li>
 
-                <!--</ul>-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</nav>-->
-<!--</header>-->
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
 
 <section class="content">
+
+
     <div id="api2-explorer">
         <div class="swagger-section page-docs" style="zoom: 1">
             <div class="main-section">
@@ -235,6 +240,7 @@
         </div>
     </div>
 </section>
+
 </body>
 </html>
 
