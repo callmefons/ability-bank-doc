@@ -3,12 +3,24 @@
     "info": {
         "version": "1.0.0",
         "title": "Ability Bank API",
+        "description": "A sample API that uses a petstore as an example to demonstrate features in the swagger-2.0 specification",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+          "name": "Swagger API Team",
+          "email": "apiteam@swagger.io",
+          "url": "http://swagger.io"
+        },
         "license": {
-            "name": "MIT"
+          "name": "MIT",
+          "url": "http://github.com/gruntjs/grunt/blob/master/LICENSE-MIT"
         }
     },
-    "host": "localhost:4000",
-    "basePath": "/api",
+    "externalDocs": {
+    "description": "find more info here",
+    "url": "https://swagger.io/about"
+  },
+    "host": "localhost:3000",
+    "basePath": "/api/v0",
     "schemes": [
         "http"
     ],
@@ -74,26 +86,16 @@
                                 "user",
                                 "access_token"
                             ],
-                            "properties": {
-                                "user": {
-                                    "$ref": "#/definitions/profile_response"
-                                }
-                            }
+                            "$ref": "#/definitions/profile_response"
                         }
                     },
-                    "400": {
-                        "description": "Invalid request body. The message will vary depending on the cause."
-                    },
                     "401": {
-                    "description": "Invalid token"
-                  },
-                    "409": {
-                        "description": "Invalid or missing api token"
+                      "description": "Authentication failed. Invalid login."
                     }
                 }
             }
         },
-        "/account/user": {
+        "/users": {
             "get": {
                 "description": "This endpoint can be used to retrieve a list of users. The Authorization header should be Authorization",
                 "summary": "List or search users",
@@ -110,15 +112,9 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/users_response"
+                                "$ref": "#/definitions/get_users_response"
                             }
                         }
-                    },
-                    "400": {
-                        "description": "Invalid request body. The message will vary depending on the cause."
-                    },
-                    "401": {
-                        "description": "Invalid token."
                     }
                 }
             },
@@ -146,14 +142,14 @@
                     "201": {
                         "description": "The user was created. ",
                         "schema": {
-                            "$ref": "#/definitions/users_response"
+                            "$ref": "#/definitions/post_users_response"
                         }
                     },
                     "400": {
                         "description": "Invalid request body. The message will vary depending on the cause."
                     },
                     "409": {
-                        "description": "The email or username has already been used for another user"
+                        "description": "Account with that email address already exists."
                     }
                 }
             }
@@ -178,14 +174,8 @@
                   }
                 }
               },
-              "400": {
-                "description": "Invalid request body. The message will vary depending on the cause."
-              },
               "401": {
                 "description": "Invalid token."
-              },
-              "404": {
-                "description": "The user does not exist."
               }
             }
           },
@@ -216,11 +206,8 @@
                   "$ref": "#/definitions/profile_response"
                 }
               },
-              "400": {
-                "description": "Invalid request body. The message will vary depending on the cause."
-              },
-              "409": {
-                "description": "Invalid or missing api token"
+              "401": {
+                "description": "Invalid token."
               }
             }
           }
@@ -264,10 +251,7 @@
                         }
                     },
                     "400": {
-                        "description": "Invalid request body. The message will vary depending on the cause."
-                    },
-                    "409": {
-                        "description": "Invalid or missing api token"
+                        "description": "Invalid activation string (active or inactive)"
                     }
                 }
             }
@@ -1039,11 +1023,13 @@
       "Authorization": {
         "type":"apiKey",
         "name": "Authorization",
-        "in": "header"
+        "in": "header",
+        "description": "HTTP Basic Authentication. Works over `HTTP` and `HTTPS`"
+
       }
     },
     "definitions": {
-      "api_key": {
+        "api_key": {
         "type": "object",
         "properties": {
           "_id": {
@@ -1053,7 +1039,7 @@
           }
         }
       },
-      "post_scores_body": {
+        "post_scores_body": {
         "type": "object",
         "required": [
           "value"
@@ -1067,7 +1053,7 @@
           }
         }
       },
-      "post_score_type_body": {
+        "post_score_type_body": {
         "type": "object",
         "required": [
           "score_type_name"
@@ -1124,6 +1110,7 @@
             "required": [
               "email",
               "password",
+              "confirm_password",
               "username",
               "given_name",
               "family_name"
@@ -1140,6 +1127,12 @@
                     "example": "password",
                     "description": "The user's password"
                 },
+              "confirm_password": {
+                "type": "string",
+                "minLength": 6,
+                "example": "password",
+                "description": "The user's password"
+              },
               "username": {
                 "type": "string",
                 "example": "johndoe",
@@ -1176,7 +1169,7 @@
                 }
             }
         },
-        "users_response": {
+        "post_users_response": {
             "type": "object",
             "required": [
                 "_id",
@@ -1212,15 +1205,67 @@
                     "description": "The user's family name"
                 },
                 "user_status": {
-                    "$ref": "#/definitions/user_status"
-                },
+                "$ref": "#/definitions/user_status"
+              },
+                "user_role": {
+                "$ref": "#/definitions/user_role"
+              },
                 "created_at": {
                   "$ref": "#/definitions/timestamp"
                 },
                 "updated_at": {
                   "$ref": "#/definitions/timestamp"
+                },
+                "apps" : {
+                  "description": "The list of apps that the user is admin",
+                  "example": []
+                },
+                "groups" : {
+                  "description": "The list of groups that the user has joined to",
+                  "example": []
+                },
+                "access_token": {
+                  "description": "Unique user token used for identification",
+                  "example": []
                 }
             }
+        },
+        "get_users_response": {
+          "type": "object",
+          "required": [
+            "_id",
+            "email",
+            "given_name",
+            "family_name",
+            "username"
+          ],
+          "properties": {
+            "_id": {
+              "type": "string",
+              "example": "5457edea1b8f22891a000004",
+              "description": "The user's unique identifier"
+            },
+            "email": {
+              "type": "string",
+              "example": "jhon.doe@mail.com",
+              "description": "The user's email"
+            },
+            "username": {
+              "type": "string",
+              "example": "johndoe",
+              "description": "The user's username"
+            },
+            "given_name": {
+              "type": "string",
+              "example": "john",
+              "description": "The user's given name"
+            },
+            "family_name": {
+              "type": "string",
+              "example": "doe",
+              "description": "The user's family name"
+            }
+          }
         },
         "profile_response": {
         "type": "object",
@@ -1263,6 +1308,12 @@
           "user_role": {
             "$ref": "#/definitions/user_role"
           },
+          "created_at": {
+            "$ref": "#/definitions/timestamp"
+          },
+          "updated_at": {
+            "$ref": "#/definitions/timestamp"
+          },
           "apps" : {
             "type" : "array",
             "items" : {
@@ -1276,12 +1327,6 @@
               "$ref" : "#/definitions/group_id",
               "description": "The list of groups that the user has joined to"
             }
-          },
-          "created_at": {
-            "$ref": "#/definitions/timestamp"
-          },
-          "updated_at": {
-            "$ref": "#/definitions/timestamp"
           },
           "access_token": {
             "type": "string",
