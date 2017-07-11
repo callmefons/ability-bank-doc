@@ -34,135 +34,17 @@
       {"name":"Authentication","description":"Everything" },
       {"name":"Users","description":"Everything" },
       {"name":"Profile","description":"Everything" },
-      {"name":"Apps","description":"Everything" },
+      {"name":"Application","description":"Everything" },
       {"name":"Groups","description":"Everything" },
       {"name":"ScoreTypes","description":"Everything" }
     ],
     "paths": {
-        "/auth/login": {
-            "post": {
-                "description": "Logs user into the system <code>http://localhost:8080/swagger.json</code>",
-                "summary": "Login",
-                "tags": [
-                    "Authentication"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "parameters": [
-                  {
-                    "name": "body",
-                    "in": "body",
-                    "description": "The samples on the right show you every attribute that could be used.",
-                    "required": true,
-                    "schema" : {
-                      "type": "object",
-                      "required": [
-                        "email",
-                        "password"
-                      ],
-                      "properties": {
-                        "email": {
-                          "type": "string",
-                          "example": "jhon.doe@mail.com",
-                          "description": "The user's email"
-                        },
-                        "password": {
-                          "type": "string",
-                          "minLength": 6,
-                          "example": "password",
-                          "description": "The user's password"
-                        }
-                      }
-                    }
-                  }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "The user was created. ",
-                        "schema": {
-                            "type": "object",
-                            "required": [
-                                "user",
-                                "access_token"
-                            ],
-                            "$ref": "#/definitions/profile_response"
-                        }
-                    },
-                    "401": {
-                      "description": "Authentication failed. Invalid login."
-                    }
-                }
-            }
-        },
         "/users": {
-            "get": {
-                "description": "This endpoint can be used to retrieve a list of users. The Authorization header should be Authorization",
-                "summary": "List or search users",
-                "tags": [
-                    "Users"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "parameters" : [],
-                "responses": {
-                    "200": {
-                        "description": "The users were retrieved. ",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/get_users_response"
-                            }
-                        }
-                    },
-                    "404": {
-                      "description": "The user does not exist."
-                    }
-                }
-            },
-            "post": {
-                "description": "Creates a new user according to the JSON object received in body.",
-                "summary": "Create a user",
-                "tags": [
-                    "Users"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "description": "The samples on the right show you every attribute that could be used.",
-                        "required": true,
-                        "schema" : {
-                           "$ref": "#/definitions/post_users_body"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "The user was created. ",
-                        "schema": {
-                            "$ref": "#/definitions/post_users_response"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid request body. The message will vary depending on the cause."
-                    },
-                    "409": {
-                        "description": "Account with that email address already exists."
-                    }
-                }
-            }
-        },
-        "/profile": {
           "get": {
-            "description": "This endpoint can be used to retrieve user details given the user's id.",
-            "summary": "Get a user's profile",
+            "description": "This endpoint can be used to retrieve user details given the user id.",
+            "summary": "Get a user profile",
             "tags": [
-              "Profile"
+              "Users"
             ],
             "produces": [
               "application/json"
@@ -173,7 +55,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/definitions/profile_response"
+                    "$ref": "#/definitions/get_profile_response"
                   }
                 }
               },
@@ -182,11 +64,11 @@
               }
             }
           },
-          "patch": {
-            "description": "Updates a user with the object's properties received in the request's body (the object should be a JSON object).",
-            "summary": "Update a user's profile",
+          "post": {
+            "description": "Create a user. The samples on the right show you every attribute that could be used.",
+            "summary": "Create a user",
             "tags": [
-              "Profile"
+              "Users"
             ],
             "produces": [
               "application/json"
@@ -195,7 +77,49 @@
               {
                 "name": "body",
                 "in": "body",
-                "description": "The samples on the right show you every attribute that could be used.",
+                "description": "",
+                "required": true,
+                "schema" : {
+                  "$ref": "#/definitions/post_users_body"
+                }
+              }
+            ],
+            "responses": {
+              "201": {
+                "description": "The user was created. ",
+                "schema": {
+                  "$ref": "#/definitions/post_users_response"
+                }
+              },
+              "400": {
+                "description": "Invalid request body. The message will vary depending on the cause."
+              },
+              "409": {
+                "description": "Account with that email address already exists."
+              }
+            }
+          },
+          "patch": {
+            "description": "Updates a user with the object's properties received in the request's body (the object should be a JSON object).",
+            "summary": "Update a user profile",
+            "tags": [
+              "Users"
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "parameters": [
+              {
+                "name": "client_secret",
+                "in": "header",
+                "description": "The identifier of the client.",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "body",
+                "in": "body",
+                "description": "",
                 "required": true,
                 "schema" : {
                   "$ref": "#/definitions/patch_users_by_id_body"
@@ -215,17 +139,24 @@
             }
           }
         },
-        "/profile/activation": {
+        "/users/activation": {
             "patch": {
                 "description": "This endpoint can be used to activation a single user based on the id.",
-                "summary": "Activate a user's profile",
+                "summary": "Activate a user profile",
                 "tags": [
-                    "Profile"
+                    "Users"
                 ],
                 "produces": [
                     "application/json"
                 ],
                 "parameters": [
+                  {
+                    "name": "client_secret",
+                    "in": "header",
+                    "description": "The identifier of the client.",
+                    "required": true,
+                    "type": "string"
+                  },
                     {
                         "name": "User status",
                         "in": "body",
@@ -262,25 +193,56 @@
                 }
             }
         },
+        "/apps/list": {
+        "get": {
+          "description": "Retrieves a list of all applications. Accepts a list of fields to include or exclude.",
+          "summary": "List or search apps",
+          "tags": [
+            "Application"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [],
+          "responses": {
+            "200": {
+              "description": "The apps were retrieved. ",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/apps"
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid request body. The message will vary depending on the cause."
+            },
+            "401": {
+              "description": "Invalid token."
+            },
+            "404": {
+              "description": "The app does not exist."
+            }
+          }
+        }
+      },
         "/apps": {
           "get": {
-            "description": "Get a app",
-            "summary": "Get a app",
+            "description": "<strong>Login successfully.</strong>Returns the current application's information. The amount of information retrieved depends on the current authentication scope. A client with admin auth scope will return all the information about the app, any lower level auth scope will just return public information:",
+            "summary": "Get app",
             "tags": [
-              "Apps"
+              "Application"
             ],
             "produces": [
               "application/json"
             ],
             "parameters": [
               {
-                "name": "api_key",
+                "name": "app_secret",
                 "in": "header",
-                "description": "api_key",
+                "description": "The app secret, it must not be public",
                 "required": true,
-                "schema" : {
-                  "$ref": "#/definitions/api_key"
-                }
+                "type": "string"
               }
             ],
             "responses": {
@@ -308,7 +270,7 @@
             "description": "Creates a new application.",
             "summary": "Create an app",
             "tags": [
-              "Apps"
+              "Application"
             ],
             "produces": [
               "application/json"
@@ -317,7 +279,7 @@
               {
                 "name": "body",
                 "in": "body",
-                "description": "The samples on the right show you every attribute that could be used.",
+                "description": "",
                 "required": true,
                 "schema" : {
                   "$ref": "#/definitions/post_apps_body"
@@ -343,25 +305,23 @@
             "description": "Update an application.",
             "summary": "Update an app",
             "tags": [
-              "Apps"
+              "Application"
             ],
             "produces": [
               "application/json"
             ],
             "parameters": [
               {
-                "name": "api_key",
+                "name": "app_secret",
                 "in": "header",
-                "description": "api_key",
+                "description": "The app secret, it must not be public",
                 "required": true,
-                "schema" : {
-                  "$ref": "#/definitions/api_key"
-                }
+                "type": "string"
               },
               {
                 "name": "body",
                 "in": "body",
-                "description": "The samples on the right show you every attribute that could be used.",
+                "description": "",
                 "required": true,
                 "schema" : {
                   "$ref": "#/definitions/post_apps_body"
@@ -383,25 +343,22 @@
               }
             }
           },
-
           "delete": {
             "description": "Deletes am app and all its related assets (admin, scores, etc) given its id.",
             "summary": "Delete an app",
             "tags": [
-              "Apps"
+              "Application"
             ],
             "produces": [
               "application/json"
             ],
             "parameters": [
               {
-                "name": "api_key",
+                "name": "app_secret",
                 "in": "header",
-                "description": "api_key",
+                "description": "The app secret, it must not be public",
                 "required": true,
-                "schema" : {
-                  "$ref": "#/definitions/api_key"
-                }
+                "type": "string"
               }
             ],
             "responses": {
@@ -419,88 +376,6 @@
               },
               "404": {
                 "description": "The app does not exist."
-              }
-            }
-          }
-        },
-        "/apps/list": {
-          "get": {
-            "description": "Retrieves a list of all applications. Accepts a list of fields to include or exclude.",
-            "summary": "List or search apps",
-            "tags": [
-              "Apps"
-            ],
-            "produces": [
-              "application/json"
-            ],
-            "parameters": [],
-            "responses": {
-              "200": {
-                "description": "The apps were retrieved. ",
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/apps"
-                  }
-                }
-              },
-              "400": {
-                "description": "Invalid request body. The message will vary depending on the cause."
-              },
-              "401": {
-                "description": "Invalid token."
-              },
-              "404": {
-                "description": "The app does not exist."
-              }
-            }
-          }
-        },
-        "/apps/admins":{
-          "post": {
-            "description": "Creates a new admin.",
-            "summary": "Create an admin",
-            "tags": [
-              "Apps"
-            ],
-            "produces": [
-              "application/json"
-            ],
-            "parameters": [
-              {
-                "name": "api_key",
-                "in": "header",
-                "description": "api_key",
-                "required": true,
-                "schema" : {
-                  "$ref": "#/definitions/api_key"
-                }
-              },
-              {
-                "name": "body",
-                "in": "body",
-                "description": "The samples on the right show you every attribute that could be used.",
-                "required": true,
-                "schema" : {
-                  "$ref": "#/definitions/user_id"
-                }
-              }
-            ],
-            "responses": {
-              "201": {
-                "description": "The admin was created. ",
-                "schema": {
-                  "$ref": "#/definitions/apps"
-                }
-              },
-              "400": {
-                "description": "Invalid request body. The message will vary depending on the cause."
-              },
-              "404": {
-                "description": "The user does not exist."
-              },
-              "409": {
-                "description": "App with that admin already exists."
               }
             }
           }
@@ -549,7 +424,7 @@
               {
                 "name": "body",
                 "in": "body",
-                "description": "The samples on the right show you every attribute that could be used.",
+                "description": "",
                 "required": true,
                 "schema" : {
                   "$ref": "#/definitions/post_groups_body"
@@ -590,7 +465,7 @@
               {
                 "name": "body",
                 "in": "body",
-                "description": "The samples on the right show you every attribute that could be used.",
+                "description": "",
                 "required": true,
                 "schema" : {
                   "$ref": "#/definitions/post_groups_body"
@@ -664,7 +539,7 @@
               {
                 "name": "body",
                 "in": "body",
-                "description": "The samples on the right show you every attribute that could be used.",
+                "description": "",
                 "required": true,
                 "schema" : {
                   "$ref": "#/definitions/user_id"
@@ -711,7 +586,7 @@
             {
               "name": "body",
               "in": "body",
-              "description": "The samples on the right show you every attribute that could be used.",
+              "description": "",
               "required": true,
               "schema" : {
                 "$ref": "#/definitions/user_id"
@@ -782,13 +657,11 @@
             ],
             "parameters": [
               {
-                "name": "api_key",
+                "name": "app_secret",
                 "in": "header",
-                "description": "api_key",
+                "description": "The app secret, it must not be public",
                 "required": true,
-                "schema" : {
-                  "$ref": "#/definitions/api_key"
-                }
+                "type": "string"
               }
             ],
             "responses": {
@@ -823,18 +696,16 @@
             ],
             "parameters": [
               {
-                "name": "api_key",
+                "name": "app_secret",
                 "in": "header",
-                "description": "api_key",
+                "description": "The app secret, it must not be public",
                 "required": true,
-                "schema" : {
-                  "$ref": "#/definitions/api_key"
-                }
+                "type": "string"
               },
               {
                 "name": "body",
                 "in": "body",
-                "description": "The samples on the right show you every attribute that could be used.",
+                "description": "",
                 "required": true,
                 "schema" : {
                   "$ref": "#/definitions/post_score_type_body"
@@ -866,13 +737,11 @@
             ],
             "parameters": [
               {
-                "name": "api_key",
+                "name": "app_secret",
                 "in": "header",
-                "description": "api_key",
+                "description": "The app secret, it must not be public",
                 "required": true,
-                "schema" : {
-                  "$ref": "#/definitions/api_key"
-                }
+                "type": "string"
               },
               {
                 "name": "score_type_id",
@@ -911,13 +780,11 @@
             ],
             "parameters": [
               {
-                "name": "api_key",
+                "name": "app_secret",
                 "in": "header",
-                "description": "api_key",
+                "description": "The app secret, it must not be public",
                 "required": true,
-                "schema" : {
-                  "$ref": "#/definitions/api_key"
-                }
+                "type": "string"
               },
               {
                 "name": "score_type_id",
@@ -929,7 +796,7 @@
               {
                 "name": "body",
                 "in": "body",
-                "description": "The samples on the right show you every attribute that could be used.",
+                "description": "",
                 "required": true,
                 "schema" : {
                   "$ref": "#/definitions/post_score_type_body"
@@ -952,7 +819,7 @@
             }
           },
           "delete": {
-            "description": "Deletes a score and all its related assets (apps, etc) given its id.",
+            "description": "Deletes a score types and all its related assets (apps, etc) given its id.",
             "summary": "Delete scores",
             "tags": [
               "ScoreTypes"
@@ -962,13 +829,11 @@
             ],
             "parameters": [
               {
-                "name": "api_key",
+                "name": "app_secret",
                 "in": "header",
-                "description": "api_key",
+                "description": "The app secret, it must not be public",
                 "required": true,
-                "schema" : {
-                  "$ref": "#/definitions/api_key"
-                }
+                "type": "string"
               },
               {
                 "name": "score_type_id",
@@ -1003,18 +868,16 @@
             ],
             "parameters": [
               {
-                "name": "api_key",
+                "name": "app_secret",
                 "in": "header",
-                "description": "api_key",
+                "description": "The app secret, it must not be public",
                 "required": true,
-                "schema" : {
-                  "$ref": "#/definitions/api_key"
-                }
+                "type": "string"
               },
               {
                 "name": "body",
                 "in": "body",
-                "description": "The samples on the right show you every attribute that could be used.",
+                "description": "",
                 "required": true,
                 "schema" : {
                   "$ref": "#/definitions/post_scores_body"
@@ -1046,13 +909,11 @@
             ],
             "parameters": [
               {
-                "name": "api_key",
+                "name": "app_secret",
                 "in": "header",
-                "description": "api_key",
+                "description": "The app secret, it must not be public",
                 "required": true,
-                "schema" : {
-                  "$ref": "#/definitions/api_key"
-                }
+                "type": "string"
               },
               {
                 "name": "score_id",
@@ -1078,140 +939,57 @@
             }
           }
       },
-        "/scores/client": {
-        "post": {
-          "description": "Get scores of client",
-          "summary": "Get scores of client",
-          "tags": [
-            "Scores"
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "parameters": [
-            {
-              "name": "api_key",
-              "in": "header",
-              "description": "api_key",
-              "required": true,
-              "schema" : {
-                "$ref": "#/definitions/api_key"
-              }
-            },
-            {
-              "name": "body",
-              "in": "body",
-              "description": "The samples on the right show you every attribute that could be used.",
-              "required": true,
-              "schema" : {
-                "$ref": "#/definitions/post_scores_client_body"
-              }
-            }
-          ],
-          "responses": {
-            "201": {
-              "description": "The scores was created. ",
-              "schema": {
-                "$ref": "#/definitions/post_scores_client_response"
-              }
-            },
-            "400": {
-              "description": "Invalid request body. The message will vary depending on the cause."
-            }
-          }
-        }
-      },
-        "/clients/auth": {
-          "post": {
-            "description": "Get a client according to the JSON object received in body.",
-            "summary": " Client Authentication",
+        "/scores/{score_type_id}/{user_id}": {
+          "get": {
+            "description": "Get score by user id",
+            "summary": "Get score by Id",
             "tags": [
-              "Clients"
+              "Scores"
             ],
             "produces": [
               "application/json"
             ],
             "parameters": [
               {
-                "name": "api_key",
+                "name": "app_secret",
                 "in": "header",
-                "description": "api_key",
+                "description": "The app secret, it must not be public",
                 "required": true,
-                "schema" : {
-                  "$ref": "#/definitions/api_key"
-                }
+                "type": "string"
               },
               {
-                "name": "body",
-                "in": "body",
-                "description": "The samples on the right show you every attribute that could be used.",
+                "name": "score_type_id",
+                "in": "path",
+                "description": "",
                 "required": true,
-                "schema" : {
-                  "$ref": "#/definitions/post_clients_body"
-                }
+                "type": "string"
+              },
+              {
+                "name": "user_id",
+                "in": "path",
+                "description": "",
+                "required": true,
+                "type": "string"
               }
             ],
             "responses": {
-              "201": {
-                "description": "The user was created. ",
+              "200": {
+                "description": "The score types were retrieved. ",
                 "schema": {
-                  "$ref": "#/definitions/post_clients_response"
+                  "$ref": "#/definitions/get_score_type_response"
                 }
               },
-              "400": {
-                "description": "Invalid request body. The message will vary depending on the cause."
-              },
-              "409": {
-                "description": "Account with that email address already exists."
+              "404": {
+                "description": "The score types does not exits.",
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/score_type"
+                  }
+                }
               }
             }
           }
-        },
-        "/clients": {
-        "post": {
-          "description": "Creates a new client according to the JSON object received in body.",
-          "summary": "Create a client",
-          "tags": [
-            "Clients"
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "parameters": [
-            {
-              "name": "api_key",
-              "in": "header",
-              "description": "api_key",
-              "required": true,
-              "schema" : {
-                "$ref": "#/definitions/api_key"
-              }
-            },
-            {
-              "name": "body",
-              "in": "body",
-              "description": "The samples on the right show you every attribute that could be used.",
-              "required": true,
-              "schema" : {
-                "$ref": "#/definitions/post_clients_body"
-              }
-            }
-          ],
-          "responses": {
-            "201": {
-              "description": "The user was created. ",
-              "schema": {
-                "$ref": "#/definitions/post_clients_response"
-              }
-            },
-            "400": {
-              "description": "Invalid request body. The message will vary depending on the cause."
-            },
-            "409": {
-              "description": "Account with that email address already exists."
-            }
-          }
-        }
       }
     },
     "securityDefinitions": {
@@ -1224,13 +1002,13 @@
       }
     },
     "definitions": {
-        "api_key": {
+        "client_id": {
         "type": "object",
         "properties": {
           "_id": {
             "type": "string",
             "example": "MHrHDcEfxjoYZgeFOTE2cBab30RNFh7HgQ",
-            "description": "api_key"
+            "description": "client_id"
           }
         }
       },
@@ -1293,10 +1071,10 @@
                   "example": 50,
                   "description": "total score"
                 },
-                "created_at": {
+                "createdAt": {
                   "$ref": "#/definitions/timestamp"
                 },
-                "updated_at": {
+                "updatedAt": {
                   "$ref": "#/definitions/timestamp"
                 }
               }
@@ -1337,7 +1115,7 @@
             "example": "59608228a3f8735325e7e297",
             "description": "The id of score type"
           },
-          "client_id": {
+          "user_id": {
             "type": "string",
             "example": "0RMHrHDcEMHrHDcEfxjoYZgeFONFh7HgQ",
             "description": "The id of user"
@@ -1350,6 +1128,25 @@
           }
         }
       },
+        "post_scores_user_body": {
+        "type": "object",
+        "required": [
+          "score_type_id",
+          "user_id"
+        ],
+        "properties": {
+          "score_type_id":{
+            "type" : "string",
+            "example": "59608228a3f8735325e7e297",
+            "description": "The id of score type"
+          },
+          "user_id": {
+            "type": "string",
+            "example": "0RMHrHDcEMHrHDcEfxjoYZgeFONFh7HgQ",
+            "description": "The id of user"
+          }
+        }
+      },
         "post_score_type_body": {
         "type": "object",
         "required": [
@@ -1357,7 +1154,7 @@
           "client_id"
         ],
         "properties": {
-          "owner_id": {
+          "user_id": {
             "type": "string",
             "example": "5960e225dd2ecec9d2f441bf",
             "description": "The id of user"
@@ -1393,19 +1190,13 @@
         "post_apps_body": {
           "type": "object",
           "required": [
-            "app_name",
-            "app_description"
+            "app_name"
           ],
           "properties": {
             "app_name": {
               "type": "string",
               "example": "My application",
               "description": "The name of the app"
-            },
-            "app_description": {
-              "type": "string",
-              "example": "used by front-ends and untrusted parties.",
-              "description": "Free text description of the app. "
             }
           }
         },
@@ -1422,17 +1213,27 @@
           "_id": {
             "type": "string",
             "example": "5457edea1b8f22891a000004",
-            "description": "The user's unique identifier"
+            "description": "The user unique identifier"
           },
-          "email": {
+          "name": {
             "type": "string",
-            "example": "jhon.doe@mail.com",
-            "description": "The user's email"
+            "example": "client",
+            "description": "The name of the client."
           },
-          "created_at": {
+          "id": {
+            "type": "string",
+            "example": "AaiyAPdpYdesoKnqjj8HJqRn4T5titww",
+            "description": "The id of the client"
+          },
+          "secret": {
+            "type": "string",
+            "example": "b9429616-4b63-4daa-bc1a-9d8f03f09d36",
+            "description": "The client secret, it must not be public"
+          },
+          "createdAt": {
             "$ref": "#/definitions/timestamp"
           },
-          "updated_at": {
+          "updatedAt": {
             "$ref": "#/definitions/timestamp"
           }
         }
@@ -1441,23 +1242,13 @@
         "type": "object",
         "required": [
           "email",
-          "password",
-          "confirm_password",
-          "username",
-          "given_name",
-          "family_name"
+          "password"
         ],
         "properties": {
-          "email": {
+          "name": {
             "type": "string",
-            "example": "jhon.doe@mail.com",
-            "description": "The user's email"
-          },
-          "password": {
-            "type": "string",
-            "minLength": 6,
-            "example": "password",
-            "description": "The user's password"
+            "example": "client",
+            "description": "The name of the client."
           }
         }
       },
@@ -1472,37 +1263,31 @@
               "family_name"
             ],
             "properties": {
-                "email": {
+              "email": {
                     "type": "string",
                     "example": "jhon.doe@mail.com",
-                    "description": "The user's email"
+                    "description": "The user mail"
                 },
-                "password": {
+              "password": {
                     "type": "string",
                     "minLength": 6,
                     "example": "password",
-                    "description": "The user's password"
+                    "description": "The user password (Password must be at least 6 characters long)"
                 },
-              "confirm_password": {
-                "type": "string",
-                "minLength": 6,
-                "example": "password",
-                "description": "The user's password"
-              },
               "username": {
                 "type": "string",
                 "example": "johndoe",
-                "description": "The user's username"
+                "description": "The user name"
               },
               "given_name": {
                 "type": "string",
                 "example": "john",
-                "description": "The user's given_name"
+                "description": "The user given_name"
               },
               "family_name": {
                 "type": "string",
                 "example": "doe",
-                "description": "The user's family_name"
+                "description": "The user family_name"
               }
             }
         },
@@ -1516,147 +1301,111 @@
                 "given_name": {
                     "type": "string",
                     "example": "john",
-                    "description": "The user's given_name"
+                    "description": "The user given_name"
                 },
                 "family_name": {
                     "type": "string",
                     "example": "doe",
-                    "description": "The user's family_name"
+                    "description": "The user family_name"
                 }
             }
         },
         "post_users_response": {
             "type": "object",
-            "required": [
-                "_id",
-                "email",
-                "given_name",
-                "family_name",
-                "username"
-            ],
             "properties": {
-                "_id": {
-                    "type": "string",
-                    "example": "5457edea1b8f22891a000004",
-                    "description": "The user's unique identifier"
-                },
-                "email": {
-                    "type": "string",
-                    "example": "jhon.doe@mail.com",
-                    "description": "The user's email"
-                },
-                "username": {
-                  "type": "string",
-                  "example": "johndoe",
-                  "description": "The user's username"
-                },
-                "given_name": {
-                    "type": "string",
-                    "example": "john",
-                    "description": "The user's given name"
-                },
-                "family_name": {
-                    "type": "string",
-                    "example": "doe",
-                    "description": "The user's family name"
-                },
-                "user_status": {
-                "$ref": "#/definitions/user_status"
+              "_id": {
+                "type": "string",
+                "example": "5457edea1b8f22891a000004",
+                "description": "The user unique identifier"
               },
-                "user_role": {
-                "$ref": "#/definitions/user_role"
+              "email": {
+                "type": "string",
+                "example": "jhon.doe@mail.com",
+                "description": "The user mail"
               },
-                "created_at": {
-                  "$ref": "#/definitions/timestamp"
-                },
-                "updated_at": {
-                  "$ref": "#/definitions/timestamp"
-                },
-                "apps" : {
-                  "description": "The list of apps that the user is admin",
-                  "example": []
-                },
-                "groups" : {
-                  "description": "The list of groups that the user has joined to",
-                  "example": []
-                },
-                "access_token": {
-                  "description": "Unique user token used for identification",
-                  "example": []
-                }
+              "username": {
+                "type": "string",
+                "example": "johndoe",
+                "description": "The user name"
+              },
+              "given_name": {
+                "type": "string",
+                "example": "john",
+                "description": "The user given name"
+              },
+              "family_name": {
+                "type": "string",
+                "example": "doe",
+                "description": "The user family name"
+              },
+              "createdAt": {
+                "$ref": "#/definitions/timestamp"
+              },
+              "updatedAt": {
+                "$ref": "#/definitions/timestamp"
+              }
             }
         },
         "get_users_response": {
           "type": "object",
-          "required": [
-            "_id",
-            "email",
-            "given_name",
-            "family_name",
-            "username"
-          ],
           "properties": {
             "_id": {
               "type": "string",
               "example": "5457edea1b8f22891a000004",
-              "description": "The user's unique identifier"
+              "description": "The user unique identifier"
             },
             "email": {
               "type": "string",
               "example": "jhon.doe@mail.com",
-              "description": "The user's email"
+              "description": "The user mail"
             },
             "username": {
               "type": "string",
               "example": "johndoe",
-              "description": "The user's username"
+              "description": "The user name"
             },
             "given_name": {
               "type": "string",
               "example": "john",
-              "description": "The user's given name"
+              "description": "The user given name"
             },
             "family_name": {
               "type": "string",
               "example": "doe",
-              "description": "The user's family name"
+              "description": "The user family name"
+            },
+            "user_status": {
+              "$ref": "#/definitions/user_status"
             }
           }
         },
         "profile_response": {
         "type": "object",
-        "required": [
-          "_id",
-          "email",
-          "given_name",
-          "family_name",
-          "username"
-        ],
         "properties": {
           "_id": {
             "type": "string",
             "example": "5457edea1b8f22891a000004",
-            "description": "The user's unique identifier"
+            "description": "The user unique identifier"
           },
           "email": {
             "type": "string",
             "example": "jhon.doe@mail.com",
-            "description": "The user's email"
+            "description": "The user email"
           },
           "username": {
             "type": "string",
             "example": "johndoe",
-            "description": "The user's username"
+            "description": "The user username"
           },
           "given_name": {
             "type": "string",
             "example": "john",
-            "description": "The user's given name"
+            "description": "The user given name"
           },
           "family_name": {
             "type": "string",
             "example": "doe",
-            "description": "The user's family name"
+            "description": "The user family name"
           },
           "user_status": {
             "$ref": "#/definitions/user_status"
@@ -1664,52 +1413,91 @@
           "user_role": {
             "$ref": "#/definitions/user_role"
           },
-          "created_at": {
+          "createdAt": {
             "$ref": "#/definitions/timestamp"
           },
-          "updated_at": {
+          "updatedAt": {
+            "$ref": "#/definitions/timestamp"
+          }
+        }
+      },
+        "get_profile_response": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "5457edea1b8f22891a000004",
+            "description": "The user unique identifier"
+          },
+          "email": {
+            "type": "string",
+            "example": "jhon.doe@mail.com",
+            "description": "The user email"
+          },
+          "username": {
+            "type": "string",
+            "example": "johndoe",
+            "description": "The user username"
+          },
+          "given_name": {
+            "type": "string",
+            "example": "john",
+            "description": "The user given name"
+          },
+          "family_name": {
+            "type": "string",
+            "example": "doe",
+            "description": "The user family name"
+          },
+          "user_status": {
+            "$ref": "#/definitions/user_status"
+          }
+        }
+      },
+        "post_login_response": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "5457edea1b8f22891a000004",
+            "description": "The user unique identifier"
+          },
+          "email": {
+            "type": "string",
+            "example": "jhon.doe@mail.com",
+            "description": "The user email"
+          },
+          "username": {
+            "type": "string",
+            "example": "johndoe",
+            "description": "The user username"
+          },
+          "given_name": {
+            "type": "string",
+            "example": "john",
+            "description": "The user given name"
+          },
+          "family_name": {
+            "type": "string",
+            "example": "doe",
+            "description": "The user family name"
+          },
+          "user_status": {
+            "$ref": "#/definitions/user_status"
+          },
+          "user_role": {
+            "$ref": "#/definitions/user_role"
+          },
+          "createdAt": {
             "$ref": "#/definitions/timestamp"
           },
-          "apps" : {
-            "type" : "array",
-            "items" : {
-              "properties": {
-                "_id": {
-                  "type": "string",
-                  "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
-                  "description": "The app's unique identifier"
-                },
-                "app_name": {
-                  "type": "string",
-                  "example": "My application",
-                  "description": "The name of the app"
-                },
-                "api_key": {
-                  "type": "string",
-                  "example": "AaiyAPdpYdesoKnqjj8HJqRn4T5titww",
-                  "description": "The id of the app"
-                }
-              },
-              "description": "The list of apps that the user is admin"
-            }
+          "updatedAt": {
+            "$ref": "#/definitions/timestamp"
           },
-          "groups" : {
-            "type" : "array",
-            "items" : {
-              "properties": {
-                "_id": {
-                  "type": "string",
-                  "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
-                  "description": "The app's unique identifier"
-                },
-                "group_name": {
-                  "type": "string",
-                  "example": "My Company",
-                  "description": "The name of the group"
-                }
-              },
-              "description": "The list of groups that the user has joined to"
-            }
+          "access_token": {
+            "type": "string",
+            "example": "GENERATED_TOKEN",
+            "description": "The user access token"
           }
         }
       },
@@ -1752,7 +1540,7 @@
             "_id": {
               "type": "string",
               "example": "0RMHrHDcEMHrHDcEfxjoYZgeFONFh7HgQ",
-              "description": "The user's unique identifier"
+              "description": "The user unique identifier"
             }
           }
         },
@@ -1762,7 +1550,7 @@
           "_id": {
             "type": "string",
             "example": "0RMHrHDcEMHrHDcEfxjoYZgeFONFh7HgQ",
-            "description": "The user's unique identifier"
+            "description": "The user unique identifier"
           }
         }
       },
@@ -1824,12 +1612,12 @@
             "example": "used by front-ends and untrusted parties.",
             "description": "Free text description of the app. "
           },
-          "api_key": {
+          "client_id": {
             "type": "string",
             "example": "AaiyAPdpYdesoKnqjj8HJqRn4T5titww",
             "description": "The id of the app"
           },
-          "secret_key": {
+          "app_secret": {
             "type": "string",
             "example": "MG_TNT2ver-SylNat-_VeMmd-4m0Wab",
             "description": "The app secret, it must not be public"
@@ -1848,10 +1636,10 @@
               "description": "The list of apps that the user is admin"
             }
           },
-          "created_at": {
+          "createdAt": {
             "$ref": "#/definitions/timestamp"
           },
-          "updated_at": {
+          "updatedAt": {
             "$ref": "#/definitions/timestamp"
           }
         }
@@ -1888,10 +1676,10 @@
               "description": "The list of members that the user is member"
             }
           },
-          "created_at": {
+          "createdAt": {
             "$ref": "#/definitions/timestamp"
           },
-          "updated_at": {
+          "updatedAt": {
             "$ref": "#/definitions/timestamp"
           }
         }
@@ -1937,12 +1725,12 @@
           "client_id ": {
             "type": "string",
             "example": "FFEDwQdewfpEFEFrHD0RMHrHDch7HgQ",
-            "description": "The user's unique identifier"
+            "description": "The user unique identifier"
           },
-          "created_at": {
+          "createdAt": {
             "$ref": "#/definitions/timestamp"
           },
-          "updated_at": {
+          "updatedAt": {
             "$ref": "#/definitions/timestamp"
           }
         }
@@ -1978,12 +1766,12 @@
             "owner_id ": {
               "type": "string",
               "example": "FFEDwQdewfpEFEFrHD0RMHrHDch7HgQ",
-              "description": "The user's unique identifier"
+              "description": "The user unique identifier"
             },
-            "created_at": {
+            "createdAt": {
               "$ref": "#/definitions/timestamp"
             },
-            "updated_at": {
+            "updatedAt": {
               "$ref": "#/definitions/timestamp"
             }
           }
@@ -2000,7 +1788,7 @@
               "type" : "integer",
               "format" : "int32",
               "example": 1,
-              "description": "username of user's score"
+              "description": "username of user score"
             },
             "username": {
               "type" : "straing",
@@ -2017,10 +1805,10 @@
               "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
               "description": "The score types id unique identifier"
             },
-            "created_at": {
+            "createdAt": {
               "$ref": "#/definitions/timestamp"
             },
-            "updated_at": {
+            "updatedAt": {
               "$ref": "#/definitions/timestamp"
             }
           }
