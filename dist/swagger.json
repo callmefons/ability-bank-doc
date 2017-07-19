@@ -3,12 +3,12 @@
     "info": {
         "version": "1.0.0",
         "title": "Ability Bank API",
-        "description": "A sample API that uses a petstore as an example to demonstrate features in the swagger-2.0 specification",
-        "termsOfService": "http://swagger.io/terms/",
+        "description": "This document describes the Ability Bank Management API, which is meant to be used by back-end servers or trusted parties performing administrative tasks.",
+        "termsOfService": "",
         "contact": {
-          "name": "Swagger API Team",
-          "email": "apiteam@swagger.io",
-          "url": "http://swagger.io"
+          "name": "Ability Bank API Team",
+          "email": "",
+          "url": "http://ability-bank.io"
         },
         "license": {
           "name": "MIT",
@@ -17,7 +17,7 @@
     },
     "externalDocs": {
     "description": "find more info here",
-    "url": "https://swagger.io/about"
+    "url": "https://ability-bank.io/about"
   },
     "host": "localhost:3000",
     "basePath": "/api/v0",
@@ -100,7 +100,7 @@
             }
           },
           "patch": {
-            "description": "Updates a user with the object's properties received in the request's body (the object should be a JSON object).",
+            "description": "Updates a user with the object's properties received in the request's body",
             "summary": "Update a user profile",
             "tags": [
               "Users"
@@ -193,58 +193,17 @@
                 }
             }
         },
-        "/apps/list": {
-        "get": {
-          "description": "Retrieves a list of all applications. Accepts a list of fields to include or exclude.",
-          "summary": "List or search apps",
-          "tags": [
-            "Application"
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "parameters": [],
-          "responses": {
-            "200": {
-              "description": "The apps were retrieved. ",
-              "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/definitions/apps"
-                }
-              }
-            },
-            "400": {
-              "description": "Invalid request body. The message will vary depending on the cause."
-            },
-            "401": {
-              "description": "Invalid token."
-            },
-            "404": {
-              "description": "The app does not exist."
-            }
-          }
-        }
-      },
         "/apps": {
           "get": {
-            "description": "<strong>Login successfully.</strong>Returns the current application's information. The amount of information retrieved depends on the current authentication scope. A client with admin auth scope will return all the information about the app, any lower level auth scope will just return public information:",
-            "summary": "Get app",
+            "description": "Retrieves a list of all applications. Accepts a list of fields to include or exclude.",
+            "summary": "List or search apps",
             "tags": [
               "Application"
             ],
             "produces": [
               "application/json"
             ],
-            "parameters": [
-              {
-                "name": "app_secret",
-                "in": "header",
-                "description": "The app secret, it must not be public",
-                "required": true,
-                "type": "string"
-              }
-            ],
+            "parameters": [],
             "responses": {
               "200": {
                 "description": "The apps were retrieved. ",
@@ -300,7 +259,48 @@
                 "description": "Invalid token."
               }
             }
-          },
+          }
+        },
+        "/apps/{app_id}": {
+          "get": {
+          "description": "Get an application by id",
+          "summary": "Get an app",
+          "tags": [
+            "Application"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "app_id",
+              "in": "path",
+              "required": true,
+              "description": "The id of the group to update",
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "The apps were retrieved. ",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/get_app_response"
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid request body. The message will vary depending on the cause."
+            },
+            "401": {
+              "description": "Invalid token."
+            },
+            "404": {
+              "description": "The app does not exist."
+            }
+          }
+        },
           "patch": {
             "description": "Update an application.",
             "summary": "Update an app",
@@ -312,10 +312,10 @@
             ],
             "parameters": [
               {
-                "name": "app_secret",
-                "in": "header",
-                "description": "The app secret, it must not be public",
+                "name": "app_id",
+                "in": "path",
                 "required": true,
+                "description": "The id of the app to update",
                 "type": "string"
               },
               {
@@ -344,7 +344,7 @@
             }
           },
           "delete": {
-            "description": "Deletes am app and all its related assets (admin, scores, etc) given its id.",
+            "description": "Deletes an app and all its related assets (admin, scores, etc) given its id.",
             "summary": "Delete an app",
             "tags": [
               "Application"
@@ -354,10 +354,10 @@
             ],
             "parameters": [
               {
-                "name": "app_secret",
-                "in": "header",
-                "description": "The app secret, it must not be public",
+                "name": "app_id",
+                "in": "path",
                 "required": true,
+                "description": "The id of the app to update",
                 "type": "string"
               }
             ],
@@ -379,7 +379,7 @@
               }
             }
           }
-        },
+      },
         "/groups": {
           "get": {
             "description": "Retrieves a list of all groups. Accepts a list of fields to include or exclude.",
@@ -645,7 +645,41 @@
           }
         }
       },
-        "/score-types": {
+      "/score-types": {
+        "post": {
+          "description": "Creates a new score types.",
+          "summary": "Create a score types",
+          "tags": [
+            "ScoreTypes"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "description": "",
+              "required": true,
+              "schema" : {
+                "$ref": "#/definitions/post_score_type_body"
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "The score type was created. ",
+              "schema": {
+                "$ref": "#/definitions/score_type"
+              }
+            },
+            "400": {
+              "description": "Invalid request body. The message will vary depending on the cause."
+            }
+          }
+        }
+      },
+        "/score-types/apps/{app_id}": {
           "get": {
             "description": "Retrieves a list of all score types. Accepts a list of fields to include or exclude.",
             "summary": "List or search score types",
@@ -657,9 +691,9 @@
             ],
             "parameters": [
               {
-                "name": "app_secret",
-                "in": "header",
-                "description": "The app secret, it must not be public",
+                "name": "app_id",
+                "in": "path",
+                "description": "The id of app",
                 "required": true,
                 "type": "string"
               }
@@ -684,45 +718,6 @@
                 }
               }
             }
-          },
-          "post": {
-            "description": "Creates a new score types.",
-            "summary": "Create a score types",
-            "tags": [
-              "ScoreTypes"
-            ],
-            "produces": [
-              "application/json"
-            ],
-            "parameters": [
-              {
-                "name": "app_secret",
-                "in": "header",
-                "description": "The app secret, it must not be public",
-                "required": true,
-                "type": "string"
-              },
-              {
-                "name": "body",
-                "in": "body",
-                "description": "",
-                "required": true,
-                "schema" : {
-                  "$ref": "#/definitions/post_score_type_body"
-                }
-              }
-            ],
-            "responses": {
-              "201": {
-                "description": "The score type was created. ",
-                "schema": {
-                  "$ref": "#/definitions/score_type"
-                }
-              },
-              "400": {
-                "description": "Invalid request body. The message will vary depending on the cause."
-              }
-            }
           }
       },
         "/score-types/{score_type_id}": {
@@ -737,17 +732,10 @@
             ],
             "parameters": [
               {
-                "name": "app_secret",
-                "in": "header",
-                "description": "The app secret, it must not be public",
-                "required": true,
-                "type": "string"
-              },
-              {
                 "name": "score_type_id",
                 "in": "path",
                 "required": true,
-                "description": "The id of the score types to update",
+                "description": "The id of the score types",
                 "type": "string"
               }
             ],
@@ -755,7 +743,7 @@
               "200": {
                 "description": "The score types were retrieved. ",
                 "schema": {
-                  "$ref": "#/definitions/get_score_type_response"
+                  "$ref": "#/definitions/get_score_type_by_id_response"
                 }
               },
               "404": {
@@ -779,13 +767,6 @@
               "application/json"
             ],
             "parameters": [
-              {
-                "name": "app_secret",
-                "in": "header",
-                "description": "The app secret, it must not be public",
-                "required": true,
-                "type": "string"
-              },
               {
                 "name": "score_type_id",
                 "in": "path",
@@ -820,7 +801,7 @@
           },
           "delete": {
             "description": "Deletes a score types and all its related assets (apps, etc) given its id.",
-            "summary": "Delete scores",
+            "summary": "Delete score types",
             "tags": [
               "ScoreTypes"
             ],
@@ -829,17 +810,10 @@
             ],
             "parameters": [
               {
-                "name": "app_secret",
-                "in": "header",
-                "description": "The app secret, it must not be public",
-                "required": true,
-                "type": "string"
-              },
-              {
                 "name": "score_type_id",
                 "in": "path",
                 "required": true,
-                "description": "The id of the app to score type",
+                "description": "The id of score type",
                 "type": "string"
               }
             ],
@@ -868,13 +842,6 @@
             ],
             "parameters": [
               {
-                "name": "app_secret",
-                "in": "header",
-                "description": "The app secret, it must not be public",
-                "required": true,
-                "type": "string"
-              },
-              {
                 "name": "body",
                 "in": "body",
                 "description": "",
@@ -888,7 +855,7 @@
               "201": {
                 "description": "The scores was created. ",
                 "schema": {
-                  "$ref": "#/definitions/scores"
+                  "$ref": "#/definitions/post_scores_response"
                 }
               },
               "400": {
@@ -908,13 +875,6 @@
               "application/json"
             ],
             "parameters": [
-              {
-                "name": "app_secret",
-                "in": "header",
-                "description": "The app secret, it must not be public",
-                "required": true,
-                "type": "string"
-              },
               {
                 "name": "score_id",
                 "in": "path",
@@ -951,13 +911,6 @@
             ],
             "parameters": [
               {
-                "name": "app_secret",
-                "in": "header",
-                "description": "The app secret, it must not be public",
-                "required": true,
-                "type": "string"
-              },
-              {
                 "name": "score_type_id",
                 "in": "path",
                 "description": "",
@@ -974,9 +927,9 @@
             ],
             "responses": {
               "200": {
-                "description": "The score types were retrieved. ",
+                "description": "The scores were retrieved. ",
                 "schema": {
-                  "$ref": "#/definitions/get_score_type_response"
+                  "$ref": "#/definitions/get_scores_response"
                 }
               },
               "404": {
@@ -1002,13 +955,13 @@
       }
     },
     "definitions": {
-        "client_id": {
+        "user_id": {
         "type": "object",
         "properties": {
           "_id": {
             "type": "string",
             "example": "MHrHDcEfxjoYZgeFOTE2cBab30RNFh7HgQ",
-            "description": "client_id"
+            "description": "user_id"
           }
         }
       },
@@ -1056,7 +1009,7 @@
           },
           "scores" : {
             "type" : "array",
-            "description": "The list of apps that the user is admin",
+            "description": "The list of scores",
             "items": {
               "type": "object",
               "properties": {
@@ -1086,11 +1039,11 @@
         "type": "object",
         "required": [
           "score_type_id",
-          "client_id",
+          "user_id",
           "value"
         ],
         "properties": {
-          "client_id": {
+          "user_id": {
             "type": "string",
             "example": "0RMHrHDcEMHrHDcEfxjoYZgeFONFh7HgQ",
             "description": "The id of user"
@@ -1106,7 +1059,7 @@
         "type": "object",
         "required": [
           "score_type_id",
-          "client_id",
+          "user_id",
           "value"
         ],
         "properties": {
@@ -1151,13 +1104,13 @@
         "type": "object",
         "required": [
           "score_type_name",
-          "client_id"
+          "user_id"
         ],
         "properties": {
-          "user_id": {
+          "app_id": {
             "type": "string",
-            "example": "5960e225dd2ecec9d2f441bf",
-            "description": "The id of user"
+            "example": "5969bb9f48c3bac3d8cc0cac",
+            "description": "The id of app"
           },
           "score_type_name": {
             "type": "string",
@@ -1612,7 +1565,43 @@
             "example": "used by front-ends and untrusted parties.",
             "description": "Free text description of the app. "
           },
-          "client_id": {
+          "user_id": {
+            "type": "string",
+            "example": "AaiyAPdpYdesoKnqjj8HJqRn4T5titww",
+            "description": "The id of the app"
+          },
+          "app_secret": {
+            "type": "string",
+            "example": "MG_TNT2ver-SylNat-_VeMmd-4m0Wab",
+            "description": "The app secret, it must not be public"
+          },
+          "createdAt": {
+            "$ref": "#/definitions/timestamp"
+          },
+          "updatedAt": {
+            "$ref": "#/definitions/timestamp"
+          }
+          }
+        },
+      "get_app_response": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+            "description": "The app's unique identifier"
+          },
+          "app_name": {
+            "type": "string",
+            "example": "My application",
+            "description": "The name of the app"
+          },
+          "app_description": {
+            "type": "string",
+            "example": "used by front-ends and untrusted parties.",
+            "description": "Free text description of the app. "
+          },
+          "user_id": {
             "type": "string",
             "example": "AaiyAPdpYdesoKnqjj8HJqRn4T5titww",
             "description": "The id of the app"
@@ -1697,6 +1686,40 @@
             "example": "John's score",
             "description": "The name of the score types"
           },
+          "score_type_status": {
+            "$ref": "#/definitions/score_type_status"
+          },
+          "app_id": {
+            "type": "string",
+            "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+            "description": "The app's unique identifier"
+          },
+          "user_id ": {
+            "type": "string",
+            "example": "FFEDwQdewfpEFEFrHD0RMHrHDch7HgQ",
+            "description": "The user unique identifier"
+          },
+          "createdAt": {
+            "$ref": "#/definitions/timestamp"
+          },
+          "updatedAt": {
+            "$ref": "#/definitions/timestamp"
+          }
+        }
+      },
+        "get_score_type_by_id_response": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+            "description": "The group's unique identifier"
+          },
+          "score_type_name": {
+            "type": "string",
+            "example": "John's score",
+            "description": "The name of the score types"
+          },
           "scores" : {
             "type" : "array",
             "items" : {
@@ -1706,10 +1729,27 @@
                   "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
                   "description": "The group's unique identifier"
                 },
-                "client_id ": {
+                "user_id ": {
                   "type": "string",
                   "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
                   "description": "The score types id unique identifier"
+                },
+                "email ": {
+                  "type": "string",
+                  "example": "jhon.doe@mail.com",
+                  "description": "The email of user"
+                },
+                "count ": {
+                  "type": "integer",
+                  "format" : "int32",
+                  "example": "2",
+                  "description": "number of records"
+                },
+                "total ": {
+                  "type": "integer",
+                  "format" : "int32",
+                  "example": "200",
+                  "description": "total scores"
                 }
               }
             }
@@ -1722,7 +1762,7 @@
             "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
             "description": "The app's unique identifier"
           },
-          "client_id ": {
+          "user_id ": {
             "type": "string",
             "example": "FFEDwQdewfpEFEFrHD0RMHrHDch7HgQ",
             "description": "The user unique identifier"
@@ -1748,13 +1788,6 @@
               "example": "John's score",
               "description": "The name of the score types"
             },
-            "scores" : {
-              "type" : "array",
-              "items" : {
-                "$ref" : "#/definitions/scores_id",
-                "description": "The list of scores"
-              }
-            },
             "score_type_status": {
               "$ref": "#/definitions/score_type_status"
             },
@@ -1763,7 +1796,7 @@
               "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
               "description": "The app's unique identifier"
             },
-            "owner_id ": {
+            "user_id ": {
               "type": "string",
               "example": "FFEDwQdewfpEFEFrHD0RMHrHDch7HgQ",
               "description": "The user unique identifier"
@@ -1800,7 +1833,7 @@
               "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
               "description": "The score types id unique identifier"
             },
-            "owner_id ": {
+            "user_id ": {
               "type": "string",
               "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
               "description": "The score types id unique identifier"
@@ -1812,6 +1845,111 @@
               "$ref": "#/definitions/timestamp"
             }
           }
+      },
+      "post_scores_response": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+            "description": "The score types id unique identifier"
+          },
+          "value": {
+            "type" : "integer",
+            "format" : "int32",
+            "example": 1,
+            "description": "username of user score"
+          },
+          "app_id": {
+            "type": "string",
+            "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+            "description": "The id of app"
+          },
+          "email": {
+            "type": "string",
+            "example": "jhon.doe@mail.com",
+            "description": "The email of user"
+          },
+          "score_type_id": {
+            "type": "string",
+            "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+            "description": "The score types id unique identifier"
+          },
+          "user_id ": {
+            "type": "string",
+            "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+            "description": "The score types id unique identifier"
+          },
+          "createdAt": {
+            "$ref": "#/definitions/timestamp"
+          },
+          "updatedAt": {
+            "$ref": "#/definitions/timestamp"
+          }
+        }
+      },
+      "get_scores_response": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type" : "integer",
+            "format" : "int32",
+            "example": 1,
+            "description": "total score"
+          },
+          "count": {
+            "type" : "integer",
+            "format" : "int32",
+            "example": 1,
+            "description": "number of records"
+          },
+          "app_id": {
+            "type": "string",
+            "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+            "description": "The id of app"
+          },
+          "email": {
+            "type": "string",
+            "example": "jhon.doe@mail.com",
+            "description": "The email of user"
+          },
+          "score_type_id": {
+            "type": "string",
+            "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+            "description": "The score types id unique identifier"
+          },
+          "user_id ": {
+            "type": "string",
+            "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+            "description": "The score types id unique identifier"
+          },
+          "scores" : {
+            "type" : "array",
+            "description": "The list of scores",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+                  "description": "The app's unique identifier"
+                },
+                "value": {
+                  "type" : "integer",
+                  "format" : "int32",
+                  "example": 50,
+                  "description": "total score"
+                },
+                "createdAt": {
+                  "$ref": "#/definitions/timestamp"
+                },
+                "updatedAt": {
+                  "$ref": "#/definitions/timestamp"
+                }
+              }
+            }
+          }
+        }
       },
         "status": {
         "type": "object",

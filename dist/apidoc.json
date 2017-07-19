@@ -1,0 +1,1947 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Ability Bank API",
+    "description": "This document describes the Ability Bank APIs for developers.",
+    "termsOfService": "",
+    "contact": {
+      "name": "Ability Bank API Team",
+      "email": "",
+      "url": "http://ability-bank.io"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "http://github.com/gruntjs/grunt/blob/master/LICENSE-MIT"
+    }
+  },
+  "externalDocs": {
+    "description": "find more info here",
+    "url": "https://ability-bank.io/about"
+  },
+  "host": "localhost:3000",
+  "basePath": "/api/v0",
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "tags": [
+    {"name":"Authentication","description":"Everything" },
+    {"name":"Users","description":"Everything" },
+    {"name":"Profile","description":"Everything" },
+    {"name":"Application","description":"Everything" },
+    {"name":"Groups","description":"Everything" },
+    {"name":"ScoreTypes","description":"Everything" }
+  ],
+  "paths": {
+    "/users": {
+      "get": {
+        "description": "This endpoint can be used to retrieve user details given the user id.",
+        "summary": "Get a user profile",
+        "tags": [
+          "Users"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "The users were retrieved. ",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/get_profile_response"
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid token."
+          }
+        }
+      },
+      "post": {
+        "description": "Create a user. The samples on the right show you every attribute that could be used.",
+        "summary": "Create a user",
+        "tags": [
+          "Users"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "",
+            "required": true,
+            "schema" : {
+              "$ref": "#/definitions/post_users_body"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "The user was created. ",
+            "schema": {
+              "$ref": "#/definitions/post_users_response"
+            }
+          },
+          "400": {
+            "description": "Invalid request body. The message will vary depending on the cause."
+          },
+          "409": {
+            "description": "Account with that email address already exists."
+          }
+        }
+      },
+      "patch": {
+        "description": "Updates a user with the object's properties received in the request's body",
+        "summary": "Update a user profile",
+        "tags": [
+          "Users"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "client_secret",
+            "in": "header",
+            "description": "The identifier of the client.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "",
+            "required": true,
+            "schema" : {
+              "$ref": "#/definitions/patch_users_by_id_body"
+            }
+          }
+        ],
+        "responses": {
+          "200":{
+            "description": "The user was updated. ",
+            "schema": {
+              "$ref": "#/definitions/profile_response"
+            }
+          },
+          "401": {
+            "description": "Invalid token."
+          }
+        }
+      }
+    },
+    "/users/activation": {
+      "patch": {
+        "description": "This endpoint can be used to activation a single user based on the id.",
+        "summary": "Activate a user profile",
+        "tags": [
+          "Users"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "client_secret",
+            "in": "header",
+            "description": "The identifier of the client.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "User status",
+            "in": "body",
+            "description": "The users status can be active and inactive",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user_status":{
+                  "$ref": "#/definitions/user_status"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200":{
+            "description": "The user was updated. ",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user_status":{
+                  "$ref": "#/definitions/user_status"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid activation string (active or inactive)"
+          },
+          "401": {
+            "description": "Invalid token."
+          }
+        }
+      }
+    },
+    "/apps": {
+      "get": {
+        "description": "Retrieves a list of all applications. Accepts a list of fields to include or exclude.",
+        "summary": "List or search apps",
+        "tags": [
+          "Application"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The apps were retrieved. ",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/apps"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request body. The message will vary depending on the cause."
+          },
+          "401": {
+            "description": "Invalid token."
+          },
+          "404": {
+            "description": "The app does not exist."
+          }
+        }
+      },
+      "post": {
+        "description": "Creates a new application.",
+        "summary": "Create an app",
+        "tags": [
+          "Application"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "",
+            "required": true,
+            "schema" : {
+              "$ref": "#/definitions/post_apps_body"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "The app was created. ",
+            "schema": {
+              "$ref": "#/definitions/apps"
+            }
+          },
+          "400": {
+            "description": "Invalid request body. The message will vary depending on the cause."
+          },
+          "401": {
+            "description": "Invalid token."
+          }
+        }
+      }
+    },
+    "/apps/{app_id}": {
+      "get": {
+        "description": "Get an application by id",
+        "summary": "Get an app",
+        "tags": [
+          "Application"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "app_id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the group to update",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The apps were retrieved. ",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/get_app_response"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request body. The message will vary depending on the cause."
+          },
+          "401": {
+            "description": "Invalid token."
+          },
+          "404": {
+            "description": "The app does not exist."
+          }
+        }
+      },
+      "patch": {
+        "description": "Update an application.",
+        "summary": "Update an app",
+        "tags": [
+          "Application"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "app_id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the app to update",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "",
+            "required": true,
+            "schema" : {
+              "$ref": "#/definitions/post_apps_body"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The user was updated. ",
+            "schema": {
+              "$ref": "#/definitions/apps"
+            }
+          },
+          "400": {
+            "description": "Invalid request body. The message will vary depending on the cause."
+          },
+          "404": {
+            "description": "The app does not exist."
+          }
+        }
+      },
+      "delete": {
+        "description": "Deletes an app and all its related assets (admin, scores, etc) given its id.",
+        "summary": "Delete an app",
+        "tags": [
+          "Application"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "app_id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the app to update",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The app was deleted.",
+            "schema": {
+              "$ref": "#/definitions/status"
+            }
+          },
+          "400": {
+            "description": "Invalid request body. The message will vary depending on the cause."
+          },
+          "401": {
+            "description": "Invalid token."
+          },
+          "404": {
+            "description": "The app does not exist."
+          }
+        }
+      }
+    },
+    "/groups": {
+      "get": {
+        "description": "Retrieves a list of all groups. Accepts a list of fields to include or exclude.",
+        "summary": "List or search groups",
+        "tags": [
+          "Groups"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "The groups were retrieved. ",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/groups"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request body. The message will vary depending on the cause."
+          },
+          "401": {
+            "description": "Invalid token."
+          },
+          "404": {
+            "description": "The groups does not exist."
+          }
+        }
+      },
+      "post": {
+        "description": "Creates new group.",
+        "summary": "Create group",
+        "tags": [
+          "Groups"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "",
+            "required": true,
+            "schema" : {
+              "$ref": "#/definitions/post_groups_body"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "The group was created. ",
+            "schema": {
+              "$ref": "#/definitions/groups"
+            }
+          },
+          "400": {
+            "description": "Invalid request body. The message will vary depending on the cause."
+          }
+        }
+      }
+    },
+    "/groups/{group_id}": {
+      "patch": {
+        "description": "Updates group.",
+        "summary": "Update group",
+        "tags": [
+          "Groups"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "group_id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the group to update",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "",
+            "required": true,
+            "schema" : {
+              "$ref": "#/definitions/post_groups_body"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The group was updated. ",
+            "schema": {
+              "$ref": "#/definitions/groups"
+            }
+          },
+          "400": {
+            "description": "Invalid request body. The message will vary depending on the cause."
+          }
+        }
+      },
+      "delete": {
+        "description": "Deletes group and all its related assets (admins, users, etc) given its id.",
+        "summary": "Delete group",
+        "tags": [
+          "Groups"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "group_id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the group",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The group was deleted.",
+            "schema": {
+              "$ref": "#/definitions/status"
+            }
+          },
+          "400": {
+            "description": "Invalid request body. The message will vary depending on the cause."
+          },
+          "404": {
+            "description": "The group does not exist."
+          }
+        }
+      }
+    },
+    "/groups/{group_id}/admins":{
+      "post": {
+        "description": "Add admins to group.",
+        "summary": "Add admins",
+        "tags": [
+          "Groups"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "group_id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the group",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "",
+            "required": true,
+            "schema" : {
+              "$ref": "#/definitions/client_id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The admins was added. ",
+            "schema": {
+              "$ref": "#/definitions/groups"
+            }
+          },
+          "400": {
+            "description": "Invalid request body. The message will vary depending on the cause."
+          },
+          "404": {
+            "description": "The group does not exist."
+          },
+          "409": {
+            "description": "Group with that admin already exists."
+          }
+        }
+      }
+    },
+    "/groups/{group_id}/members":{
+      "post": {
+        "description": "Add members to group.",
+        "summary": "Add members",
+        "tags": [
+          "Groups"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "group_id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the group",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "",
+            "required": true,
+            "schema" : {
+              "$ref": "#/definitions/client_id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The members was added. ",
+            "schema": {
+              "$ref": "#/definitions/groups"
+            }
+          },
+          "400": {
+            "description": "Invalid request body. The message will vary depending on the cause."
+          },
+          "404": {
+            "description": "The group does not exist."
+          },
+          "409": {
+            "description": "Group with that members already exists."
+          }
+        }
+      },
+      "delete": {
+        "description": "Leave group",
+        "summary": "Leave group",
+        "tags": [
+          "Groups"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "group_id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the group",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The user was leaved.",
+            "schema": {
+              "$ref": "#/definitions/status"
+            }
+          },
+          "400": {
+            "description": "Invalid request body. The message will vary depending on the cause."
+          },
+          "404": {
+            "description": "The group does not exist."
+          }
+        }
+      }
+    },
+    "/score-types": {
+      "post": {
+        "description": "Creates a new score types.",
+        "summary": "Create a score types",
+        "tags": [
+          "ScoreTypes"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "",
+            "required": true,
+            "schema" : {
+              "$ref": "#/definitions/post_score_type_body"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "The score type was created. ",
+            "schema": {
+              "$ref": "#/definitions/score_type"
+            }
+          },
+          "400": {
+            "description": "Invalid request body. The message will vary depending on the cause."
+          }
+        }
+      }
+    },
+    "/score-types/apps/{app_id}": {
+      "get": {
+        "description": "Retrieves a list of all score types. Accepts a list of fields to include or exclude.",
+        "summary": "List or search score types",
+        "tags": [
+          "ScoreTypes"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "app_id",
+            "in": "path",
+            "description": "The id of app",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The score types were retrieved. ",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/get_score_type_response"
+              }
+            }
+          },
+          "404": {
+            "description": "The score types does not exits.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/score_type"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/score-types/{score_type_id}": {
+      "get": {
+        "description": "Get score type by Id",
+        "summary": "Get score type by Id",
+        "tags": [
+          "ScoreTypes"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "score_type_id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the score types",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The score types were retrieved. ",
+            "schema": {
+              "$ref": "#/definitions/get_score_type_by_id_response"
+            }
+          },
+          "404": {
+            "description": "The score types does not exits.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/score_type"
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "Update a score types.",
+        "summary": "Update an score types",
+        "tags": [
+          "ScoreTypes"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "score_type_id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the score types to update",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "",
+            "required": true,
+            "schema" : {
+              "$ref": "#/definitions/post_score_type_body"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The score type was updated.",
+            "schema": {
+              "$ref": "#/definitions/score_type"
+            }
+          },
+          "400": {
+            "description": "Invalid request body. The message will vary depending on the cause."
+          },
+          "404": {
+            "description": "The score type does not exits."
+          }
+        }
+      },
+      "delete": {
+        "description": "Deletes a score types and all its related assets (apps, etc) given its id.",
+        "summary": "Delete score types",
+        "tags": [
+          "ScoreTypes"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "score_type_id",
+            "in": "path",
+            "required": true,
+            "description": "The id of score type",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The app was deleted. ",
+            "schema": {
+              "$ref": "#/definitions/status"
+            }
+          },
+          "400": {
+            "description": "Invalid request body. The message will vary depending on the cause."
+          }
+        }
+      }
+    },
+    "/scores": {
+      "post": {
+        "description": "Creates a new scores.",
+        "summary": "Create a scores",
+        "tags": [
+          "Scores"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "",
+            "required": true,
+            "schema" : {
+              "$ref": "#/definitions/post_scores_body"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "The score was created. ",
+            "schema": {
+              "$ref": "#/definitions/post_scores_response"
+            }
+          },
+          "400": {
+            "description": "Invalid request body. The message will vary depending on the cause."
+          }
+        }
+      }
+    },
+    "/scores/{score_id}": {
+      "delete": {
+        "description": "Deletes a scores and all its related assets (score type, etc) given its id.",
+        "summary": "Delete a scores",
+        "tags": [
+          "Scores"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "score_id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the score",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The score was deleted. ",
+            "schema": {
+              "$ref": "#/definitions/status"
+            }
+          },
+          "400": {
+            "description": "Invalid request body. The message will vary depending on the cause."
+          },
+          "404": {
+            "description": "The score does not exits."
+          }
+        }
+      }
+    },
+    "/scores/{score_type_id}/{user_id}": {
+      "get": {
+        "description": "Get score by user id",
+        "summary": "Get score by Id",
+        "tags": [
+          "Scores"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "score_type_id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The scores were retrieved. ",
+            "schema": {
+              "$ref": "#/definitions/get_scores_response"
+            }
+          },
+          "404": {
+            "description": "The score does not exits.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/score_type"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "Authorization": {
+      "type":"apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "description": "HTTP Basic Authentication. Works over `HTTP` and `HTTPS`"
+
+    }
+  },
+  "definitions": {
+    "client_id": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "MHrHDcEfxjoYZgeFOTE2cBab30RNFh7HgQ",
+          "description": "client_id"
+        }
+      }
+    },
+    "post_scores_client_response": {
+      "type": "object",
+      "required": [
+        "_id",
+        "email",
+        "given_name",
+        "family_name",
+        "username"
+      ],
+      "properties": {
+        "result": {
+          "type": "object",
+          "properties": {
+            "total": {
+              "type" : "integer",
+              "format" : "int32",
+              "example": 50,
+              "description": "total of value"
+            },
+            "count": {
+              "type" : "integer",
+              "format" : "int32",
+              "example": 1,
+              "description": "total of records"
+            },
+            "email": {
+              "type" : "string",
+              "example": "john.doe@gmail.com",
+              "description": "email of client"
+            },
+            "score_type_id": {
+              "type" : "string",
+              "example": "5961e7859f5b1c29c7027a65",
+              "description": "score type id of score"
+            },
+            "app_id": {
+              "type" : "string",
+              "example": "5961ea504bab9e2f80aaec6c",
+              "description": "app id of score"
+            }
+          }
+        },
+        "scores" : {
+          "type" : "array",
+          "description": "The list of scores",
+          "items": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string",
+                "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+                "description": "The app's unique identifier"
+              },
+              "value": {
+                "type" : "integer",
+                "format" : "int32",
+                "example": 50,
+                "description": "total score"
+              },
+              "createdAt": {
+                "$ref": "#/definitions/timestamp"
+              },
+              "updatedAt": {
+                "$ref": "#/definitions/timestamp"
+              }
+            }
+          }
+        }
+      }
+    },
+    "post_scores_client_body": {
+      "type": "object",
+      "required": [
+        "score_type_id",
+        "client_id",
+        "value"
+      ],
+      "properties": {
+        "client_id": {
+          "type": "string",
+          "example": "0RMHrHDcEMHrHDcEfxjoYZgeFONFh7HgQ",
+          "description": "The id of user"
+        },
+        "score_type_id":{
+          "type" : "string",
+          "example": "59608228a3f8735325e7e297",
+          "description": "The id of score type"
+        }
+      }
+    },
+    "post_scores_body": {
+      "type": "object",
+      "required": [
+        "score_type_id",
+        "client_id",
+        "value"
+      ],
+      "properties": {
+        "score_type_id":{
+          "type" : "string",
+          "example": "59608228a3f8735325e7e297",
+          "description": "The id of score type"
+        },
+        "user_id": {
+          "type": "string",
+          "example": "0RMHrHDcEMHrHDcEfxjoYZgeFONFh7HgQ",
+          "description": "The id of user"
+        },
+        "value": {
+          "type" : "integer",
+          "format" : "int32",
+          "example": 1,
+          "description": "value of scores"
+        }
+      }
+    },
+    "post_scores_user_body": {
+      "type": "object",
+      "required": [
+        "score_type_id",
+        "client_id"
+      ],
+      "properties": {
+        "score_type_id":{
+          "type" : "string",
+          "example": "59608228a3f8735325e7e297",
+          "description": "The id of score type"
+        },
+        "client_id": {
+          "type": "string",
+          "example": "0RMHrHDcEMHrHDcEfxjoYZgeFONFh7HgQ",
+          "description": "The id of user"
+        }
+      }
+    },
+    "post_score_type_body": {
+      "type": "object",
+      "required": [
+        "score_type_name",
+        "client_id"
+      ],
+      "properties": {
+        "app_id": {
+          "type": "string",
+          "example": "5969bb9f48c3bac3d8cc0cac",
+          "description": "The id of app"
+        },
+        "score_type_name": {
+          "type": "string",
+          "example": "John's score",
+          "description": "The name of the score types"
+        },
+        "score_type_status": {
+          "$ref": "#/definitions/score_type_status"
+        }
+      }
+    },
+    "post_groups_body": {
+      "type": "object",
+      "required": [
+        "app_name"
+      ],
+      "properties": {
+        "group_name": {
+          "type": "string",
+          "example": "My Company",
+          "description": "The name of the group"
+        },
+        "group_description": {
+          "type": "string",
+          "example": "https://mycompany.org",
+          "description": "Free text description of the group."
+        }
+      }
+    },
+    "post_apps_body": {
+      "type": "object",
+      "required": [
+        "app_name"
+      ],
+      "properties": {
+        "app_name": {
+          "type": "string",
+          "example": "My application",
+          "description": "The name of the app"
+        }
+      }
+    },
+    "post_clients_response": {
+      "type": "object",
+      "required": [
+        "_id",
+        "email",
+        "given_name",
+        "family_name",
+        "username"
+      ],
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "5457edea1b8f22891a000004",
+          "description": "The user unique identifier"
+        },
+        "name": {
+          "type": "string",
+          "example": "client",
+          "description": "The name of the client."
+        },
+        "id": {
+          "type": "string",
+          "example": "AaiyAPdpYdesoKnqjj8HJqRn4T5titww",
+          "description": "The id of the client"
+        },
+        "secret": {
+          "type": "string",
+          "example": "b9429616-4b63-4daa-bc1a-9d8f03f09d36",
+          "description": "The client secret, it must not be public"
+        },
+        "createdAt": {
+          "$ref": "#/definitions/timestamp"
+        },
+        "updatedAt": {
+          "$ref": "#/definitions/timestamp"
+        }
+      }
+    },
+    "post_clients_body": {
+      "type": "object",
+      "required": [
+        "email",
+        "password"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "client",
+          "description": "The name of the client."
+        }
+      }
+    },
+    "post_users_body": {
+      "type": "object",
+      "required": [
+        "email",
+        "password",
+        "confirm_password",
+        "username",
+        "given_name",
+        "family_name"
+      ],
+      "properties": {
+        "email": {
+          "type": "string",
+          "example": "jhon.doe@mail.com",
+          "description": "The user mail"
+        },
+        "password": {
+          "type": "string",
+          "minLength": 6,
+          "example": "password",
+          "description": "The user password (Password must be at least 6 characters long)"
+        },
+        "username": {
+          "type": "string",
+          "example": "johndoe",
+          "description": "The user name"
+        },
+        "given_name": {
+          "type": "string",
+          "example": "john",
+          "description": "The user given_name"
+        },
+        "family_name": {
+          "type": "string",
+          "example": "doe",
+          "description": "The user family_name"
+        }
+      }
+    },
+    "patch_users_by_id_body": {
+      "type": "object",
+      "required": [
+        "given_name",
+        "family_name"
+      ],
+      "properties": {
+        "given_name": {
+          "type": "string",
+          "example": "john",
+          "description": "The user given_name"
+        },
+        "family_name": {
+          "type": "string",
+          "example": "doe",
+          "description": "The user family_name"
+        }
+      }
+    },
+    "post_users_response": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "5457edea1b8f22891a000004",
+          "description": "The user unique identifier"
+        },
+        "email": {
+          "type": "string",
+          "example": "jhon.doe@mail.com",
+          "description": "The user mail"
+        },
+        "username": {
+          "type": "string",
+          "example": "johndoe",
+          "description": "The user name"
+        },
+        "given_name": {
+          "type": "string",
+          "example": "john",
+          "description": "The user given name"
+        },
+        "family_name": {
+          "type": "string",
+          "example": "doe",
+          "description": "The user family name"
+        },
+        "createdAt": {
+          "$ref": "#/definitions/timestamp"
+        },
+        "updatedAt": {
+          "$ref": "#/definitions/timestamp"
+        }
+      }
+    },
+    "get_users_response": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "5457edea1b8f22891a000004",
+          "description": "The user unique identifier"
+        },
+        "email": {
+          "type": "string",
+          "example": "jhon.doe@mail.com",
+          "description": "The user mail"
+        },
+        "username": {
+          "type": "string",
+          "example": "johndoe",
+          "description": "The user name"
+        },
+        "given_name": {
+          "type": "string",
+          "example": "john",
+          "description": "The user given name"
+        },
+        "family_name": {
+          "type": "string",
+          "example": "doe",
+          "description": "The user family name"
+        },
+        "user_status": {
+          "$ref": "#/definitions/user_status"
+        }
+      }
+    },
+    "profile_response": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "5457edea1b8f22891a000004",
+          "description": "The user unique identifier"
+        },
+        "email": {
+          "type": "string",
+          "example": "jhon.doe@mail.com",
+          "description": "The user email"
+        },
+        "username": {
+          "type": "string",
+          "example": "johndoe",
+          "description": "The user username"
+        },
+        "given_name": {
+          "type": "string",
+          "example": "john",
+          "description": "The user given name"
+        },
+        "family_name": {
+          "type": "string",
+          "example": "doe",
+          "description": "The user family name"
+        },
+        "user_status": {
+          "$ref": "#/definitions/user_status"
+        },
+        "createdAt": {
+          "$ref": "#/definitions/timestamp"
+        },
+        "updatedAt": {
+          "$ref": "#/definitions/timestamp"
+        }
+      }
+    },
+    "get_profile_response": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "5457edea1b8f22891a000004",
+          "description": "The user unique identifier"
+        },
+        "email": {
+          "type": "string",
+          "example": "jhon.doe@mail.com",
+          "description": "The user email"
+        },
+        "username": {
+          "type": "string",
+          "example": "johndoe",
+          "description": "The user username"
+        },
+        "given_name": {
+          "type": "string",
+          "example": "john",
+          "description": "The user given name"
+        },
+        "family_name": {
+          "type": "string",
+          "example": "doe",
+          "description": "The user family name"
+        },
+        "user_status": {
+          "$ref": "#/definitions/user_status"
+        }
+      }
+    },
+    "post_login_response": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "5457edea1b8f22891a000004",
+          "description": "The user unique identifier"
+        },
+        "email": {
+          "type": "string",
+          "example": "jhon.doe@mail.com",
+          "description": "The user email"
+        },
+        "username": {
+          "type": "string",
+          "example": "johndoe",
+          "description": "The user username"
+        },
+        "given_name": {
+          "type": "string",
+          "example": "john",
+          "description": "The user given name"
+        },
+        "family_name": {
+          "type": "string",
+          "example": "doe",
+          "description": "The user family name"
+        },
+        "user_status": {
+          "$ref": "#/definitions/user_status"
+        },
+        "user_role": {
+          "$ref": "#/definitions/user_role"
+        },
+        "createdAt": {
+          "$ref": "#/definitions/timestamp"
+        },
+        "updatedAt": {
+          "$ref": "#/definitions/timestamp"
+        },
+        "access_token": {
+          "type": "string",
+          "example": "GENERATED_TOKEN",
+          "description": "The user access token"
+        }
+      }
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "DateTime",
+      "description": "ISO 8601/RFC3339 formatted DateTime",
+      "example": "2016-03-17T16:35:01.000Z"
+    },
+    "user_status": {
+      "type" : "string",
+      "example": "active",
+      "description" : "User status",
+      "enum": [
+        "active",
+        "inactive"
+      ]
+    },
+    "score_type_status": {
+      "type" : "string",
+      "example": "shared",
+      "description" : "User status",
+      "enum": [
+        "shared",
+        "private"
+      ]
+    },
+    "user_role": {
+      "type" : "string",
+      "example": "user",
+      "description" : "User role",
+      "enum": [
+        "admin",
+        "user"
+      ]
+    },
+    "client_id": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "0RMHrHDcEMHrHDcEfxjoYZgeFONFh7HgQ",
+          "description": "The user unique identifier"
+        }
+      }
+    },
+    "admin_id": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "0RMHrHDcEMHrHDcEfxjoYZgeFONFh7HgQ",
+          "description": "The user unique identifier"
+        }
+      }
+    },
+    "scores_id": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "MHrHDcEfxjoYZgeFOTE2cBab30RNFh7HgQ",
+          "description": "The score type's unique identifier"
+        }
+      }
+    },
+    "score_type_id": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "MHrHDcEfxjoYZgeFOTE2cBab30RNFh7HgQ",
+          "description": "The score type's unique identifier"
+        }
+      }
+    },
+    "app_id": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+          "description": "The app's unique identifier"
+        }
+      }
+    },
+    "group_id": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "FtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9",
+          "description": "The group's unique identifier"
+        }
+      }
+    },
+    "apps": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+          "description": "The app's unique identifier"
+        },
+        "app_name": {
+          "type": "string",
+          "example": "My application",
+          "description": "The name of the app"
+        },
+        "client_id": {
+          "type": "string",
+          "example": "AaiyAPdpYdesoKnqjj8HJqRn4T5titww",
+          "description": "The id of the app"
+        },
+        "app_secret": {
+          "type": "string",
+          "example": "MG_TNT2ver-SylNat-_VeMmd-4m0Wab",
+          "description": "The app secret, it must not be public"
+        },
+        "createdAt": {
+          "$ref": "#/definitions/timestamp"
+        },
+        "updatedAt": {
+          "$ref": "#/definitions/timestamp"
+        }
+      }
+    },
+    "get_app_response": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+          "description": "The app's unique identifier"
+        },
+        "app_name": {
+          "type": "string",
+          "example": "My application",
+          "description": "The name of the app"
+        },
+        "client_id": {
+          "type": "string",
+          "example": "AaiyAPdpYdesoKnqjj8HJqRn4T5titww",
+          "description": "The id of the app"
+        },
+        "app_secret": {
+          "type": "string",
+          "example": "MG_TNT2ver-SylNat-_VeMmd-4m0Wab",
+          "description": "The app secret, it must not be public"
+        },
+        "admins" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/admin_id",
+            "description": "The list of apps that the user is admin"
+          }
+        },
+        "score_types" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/score_type_id",
+            "description": "The list of apps that the user is admin"
+          }
+        },
+        "createdAt": {
+          "$ref": "#/definitions/timestamp"
+        },
+        "updatedAt": {
+          "$ref": "#/definitions/timestamp"
+        }
+      }
+    },
+    "groups": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+          "description": "The group's unique identifier"
+        },
+        "group_name": {
+          "type": "string",
+          "example": "My Company",
+          "description": "The name of the group"
+        },
+        "group_description": {
+          "type": "string",
+          "example": "https://mycompany.org",
+          "description": "Free text description of the group."
+        },
+        "admins" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/admin_id",
+            "description": "The list of admins that the user is admin"
+          }
+        },
+        "members" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/client_id",
+            "description": "The list of members that the user is member"
+          }
+        },
+        "createdAt": {
+          "$ref": "#/definitions/timestamp"
+        },
+        "updatedAt": {
+          "$ref": "#/definitions/timestamp"
+        }
+      }
+    },
+    "get_score_type_response": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+          "description": "The group's unique identifier"
+        },
+        "score_type_name": {
+          "type": "string",
+          "example": "John's score",
+          "description": "The name of the score types"
+        },
+        "score_type_status": {
+          "$ref": "#/definitions/score_type_status"
+        },
+        "app_id": {
+          "type": "string",
+          "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+          "description": "The app's unique identifier"
+        },
+        "client_id ": {
+          "type": "string",
+          "example": "FFEDwQdewfpEFEFrHD0RMHrHDch7HgQ",
+          "description": "The user unique identifier"
+        },
+        "createdAt": {
+          "$ref": "#/definitions/timestamp"
+        },
+        "updatedAt": {
+          "$ref": "#/definitions/timestamp"
+        }
+      }
+    },
+    "get_score_type_by_id_response": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+          "description": "The group's unique identifier"
+        },
+        "score_type_name": {
+          "type": "string",
+          "example": "John's score",
+          "description": "The name of the score types"
+        },
+        "scores" : {
+          "type" : "array",
+          "items" : {
+            "properties": {
+              "client_id ": {
+                "type": "string",
+                "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+                "description": "The score types id unique identifier"
+              },
+              "email ": {
+                "type": "string",
+                "example": "jhon.doe@mail.com",
+                "description": "The email of user"
+              },
+              "count ": {
+                "type": "integer",
+                "format" : "int32",
+                "example": "2",
+                "description": "number of records"
+              },
+              "total ": {
+                "type": "integer",
+                "format" : "int32",
+                "example": "200",
+                "description": "total scores"
+              }
+            }
+          }
+        },
+        "score_type_status": {
+          "$ref": "#/definitions/score_type_status"
+        },
+        "app_id": {
+          "type": "string",
+          "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+          "description": "The app's unique identifier"
+        },
+        "client_id ": {
+          "type": "string",
+          "example": "FFEDwQdewfpEFEFrHD0RMHrHDch7HgQ",
+          "description": "The user unique identifier"
+        },
+        "createdAt": {
+          "$ref": "#/definitions/timestamp"
+        },
+        "updatedAt": {
+          "$ref": "#/definitions/timestamp"
+        }
+      }
+    },
+    "score_type": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+          "description": "The group's unique identifier"
+        },
+        "score_type_name": {
+          "type": "string",
+          "example": "John's score",
+          "description": "The name of the score types"
+        },
+        "score_type_status": {
+          "$ref": "#/definitions/score_type_status"
+        },
+        "app_id": {
+          "type": "string",
+          "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+          "description": "The app's unique identifier"
+        },
+        "user_id ": {
+          "type": "string",
+          "example": "FFEDwQdewfpEFEFrHD0RMHrHDch7HgQ",
+          "description": "The user unique identifier"
+        },
+        "createdAt": {
+          "$ref": "#/definitions/timestamp"
+        },
+        "updatedAt": {
+          "$ref": "#/definitions/timestamp"
+        }
+      }
+    },
+    "scores": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+          "description": "The score types id unique identifier"
+        },
+        "value": {
+          "type" : "integer",
+          "format" : "int32",
+          "example": 1,
+          "description": "username of user score"
+        },
+        "username": {
+          "type" : "straing",
+          "example": "Jhon",
+          "description": "name of scores"
+        },
+        "score_type_id": {
+          "type": "string",
+          "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+          "description": "The score types id unique identifier"
+        },
+        "client_id ": {
+          "type": "string",
+          "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+          "description": "The score types id unique identifier"
+        },
+        "createdAt": {
+          "$ref": "#/definitions/timestamp"
+        },
+        "updatedAt": {
+          "$ref": "#/definitions/timestamp"
+        }
+      }
+    },
+    "post_scores_response": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+          "description": "The score types id unique identifier"
+        },
+        "value": {
+          "type" : "integer",
+          "format" : "int32",
+          "example": 1,
+          "description": "username of user score"
+        },
+        "app_id": {
+          "type": "string",
+          "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+          "description": "The id of app"
+        },
+        "email": {
+          "type": "string",
+          "example": "jhon.doe@mail.com",
+          "description": "The email of user"
+        },
+        "score_type_id": {
+          "type": "string",
+          "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+          "description": "The score types id unique identifier"
+        },
+        "user_id ": {
+          "type": "string",
+          "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+          "description": "The score types id unique identifier"
+        },
+        "createdAt": {
+          "$ref": "#/definitions/timestamp"
+        },
+        "updatedAt": {
+          "$ref": "#/definitions/timestamp"
+        }
+      }
+    },
+    "get_scores_response": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type" : "integer",
+          "format" : "int32",
+          "example": 1,
+          "description": "total score"
+        },
+        "count": {
+          "type" : "integer",
+          "format" : "int32",
+          "example": 1,
+          "description": "number of records"
+        },
+        "app_id": {
+          "type": "string",
+          "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+          "description": "The id of app"
+        },
+        "email": {
+          "type": "string",
+          "example": "jhon.doe@mail.com",
+          "description": "The email of user"
+        },
+        "score_type_id": {
+          "type": "string",
+          "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+          "description": "The score types id unique identifier"
+        },
+        "client_id ": {
+          "type": "string",
+          "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+          "description": "The score types id unique identifier"
+        },
+        "scores" : {
+          "type" : "array",
+          "description": "The list of scores",
+          "items": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string",
+                "example": "TE2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+                "description": "The app's unique identifier"
+              },
+              "value": {
+                "type" : "integer",
+                "format" : "int32",
+                "example": 50,
+                "description": "total score"
+              },
+              "createdAt": {
+                "$ref": "#/definitions/timestamp"
+              },
+              "updatedAt": {
+                "$ref": "#/definitions/timestamp"
+              }
+            }
+          }
+        }
+      }
+    },
+    "status": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "true",
+          "description": "Successful request"
+        }
+      }
+    }
+  }
+}
