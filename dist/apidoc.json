@@ -19,7 +19,7 @@
     "description": "find more info here",
     "url": "https://ability-bank.io/about"
   },
-  "host": "localhost:3000",
+  "host": "192.168.11.201",
   "basePath": "/api/v0",
   "schemes": [
     "http"
